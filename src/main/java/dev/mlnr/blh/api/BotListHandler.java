@@ -47,6 +47,8 @@ class BotListHandler {
 	 * @param  newToken
 	 *         The new token to use for the provided bot list
 	 *
+	 * @throws IllegalArgumentException
+	 *         If the provided bot list or token is {@code null} or empty
 	 * @throws IllegalStateException
 	 *         If the provided token is the same as the previous one
 	 */
