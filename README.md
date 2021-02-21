@@ -90,3 +90,25 @@ BotListHandler botListHandler = new BLHBuilder(jda).setBotLists(botLists)
 ```
 
 ### You can store the `BotListHandler` instance so if some token provided at compile-time is invalid, you can use the `swapToken` method to hotswap it at runtime.
+
+## Currently supported bot lists
+
+[botlist.space](https://botlist.space)
+
+[botsfordiscord.com](https://botsfordiscord.com)
+
+[botsondiscord.xyz](https://botsondiscord.xyz)
+
+[discordbotlist.com](https://discordbotlist.com)
+
+[discord.boats](https://discord.boats)
+
+[discordbots.co](https://discordbots.co)
+
+[discord.bots.gg](https://discord.bots.gg)
+
+[discordextremelist.xyz](https://discordextremelist.xyz)
+
+[discordservices.net](https://discordservices.net)
+
+[top.gg](https://top.gg)
