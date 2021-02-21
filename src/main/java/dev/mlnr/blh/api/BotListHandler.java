@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
@@ -27,8 +26,6 @@ public class BotListHandler {
 	private long previousGuildCount = -1;
 
 	BotListHandler(Map<BotList, String> botListMap, AutoPostingConfig autoPostingConfig) {
-		java.util.logging.Logger.getLogger(OkHttpClient.class.getName()).setLevel(Level.FINE);
-		logger.info("map size {}", botListMap.size());
 		this.botLists = botListMap;
 		this.autoPostingConfig = autoPostingConfig;
 
@@ -77,11 +74,13 @@ public class BotListHandler {
 		}
 		previousGuildCount = serverCount;
 
-		botLists.forEach((botList, token) -> updateStats(botList, token, jda, serverCount));
+		botLists.forEach((botList, token) ->{
+			updateStats(botList, token, jda, serverCount);
+			System.out.println("here");
+		});
 	}
 
 	void updateStats(BotList botList, String token, JDA jda, long serverCount) {
-		logger.info("updating for {}", botList.name());
 		String botListName = botList.name();
 		DataObject payload = DataObject.empty().put(botList.getServersParam(), serverCount);
 
@@ -98,6 +97,7 @@ public class BotListHandler {
 
 			@Override
 			public void onResponse(Call call, Response response) {
+				response.close();
 				if (response.isSuccessful()) {
 					logger.info("Successfully updated stats for bot list {}", botListName);
 				}
@@ -109,13 +109,12 @@ public class BotListHandler {
 						return;
 					}
 					if (code == 429) {
-						logger.error("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
+						logger.warn("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
 						SCHEDULER.schedule(() -> updateStats(botList, token, jda, serverCount), 15, TimeUnit.SECONDS);
 						return;
 					}
 					logger.error("Failed to update stats for bot list {} with code {}", botListName, code);
 				}
-				response.close();
 			}
 		});
 	}
