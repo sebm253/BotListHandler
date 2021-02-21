@@ -99,7 +99,7 @@ public class BotListHandler {
 						int code = response.code();
 						if (code == 401) {
 							logger.error("Failed to update stats for bot list {} as the provided token is invalid." +
-									"You can hotswap the token by calling changeToken on the BotListHandler instance.", botListName);
+									"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
 							return;
 						}
 						logger.error("Failed to update stats for bot list {} with code {}", botListName, code);
