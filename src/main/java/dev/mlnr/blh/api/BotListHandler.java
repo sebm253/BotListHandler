@@ -35,7 +35,6 @@ public class BotListHandler {
 			long initialDelay = delay;
 			if (jda.getStatus() == JDA.Status.INITIALIZED) // if jda has finished setting up cache for guilds, immediately post the guild count
 				initialDelay = 0;
-			SCHEDULER.scheduleAtFixedRate(() -> updateAllStats(jda), initialDelay, delay, autoPostingConfig.getUnit());
 		}
 	}
 
