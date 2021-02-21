@@ -94,12 +94,15 @@ public class BLHBuilder {
 	 *
 	 * @throws IllegalArgumentException
 	 *         If the provided bot list or token is {@code null} or empty
+	 *
+	 * @return This BLHBuilder instance
 	 */
-	public void addBotList(@Nonnull BotList botList, @Nonnull String token) {
+	public BLHBuilder addBotList(@Nonnull BotList botList, @Nonnull String token) {
 		Checks.notNull(botList, "The bot list");
 		Checks.notEmpty(token, "The bot list token");
 
 		botLists.put(botList, token);
+		return this;
 	}
 
 	/**
@@ -110,11 +113,14 @@ public class BLHBuilder {
 	 *
 	 * @throws IllegalArgumentException
 	 *         If the provided bot list map is {@code null} or empty
+	 *
+	 * @return This BLHBuilder instance
 	 */
-	public void setBotLists(@Nonnull Map<BotList, String> botLists) {
+	public BLHBuilder setBotLists(@Nonnull Map<BotList, String> botLists) {
 		Checks.notEmpty(botLists, "The bot lists map");
 
 		this.botLists = botLists;
+		return this;
 	}
 
 	/**
@@ -137,8 +143,10 @@ public class BLHBuilder {
 	 *
 	 * @see    #BLHBuilder(JDA)
 	 * @see    #BLHBuilder(JDA, Map)
+	 *
+	 * @return This BLHBuilder instance
 	 */
-	public void setAutoPostDelay(long delay, @Nonnull TimeUnit unit) {
+	public BLHBuilder setAutoPostDelay(long delay, @Nonnull TimeUnit unit) {
 		Checks.notNull(this.jda, "The JDA object");
 		Checks.check(delay < 1, "The delay cannot be less than 1");
 		Checks.notNull(unit, "The time unit");
@@ -146,6 +154,7 @@ public class BLHBuilder {
 
 		this.autoPostDelay = delay;
 		this.autoPostUnit = unit;
+		return this;
 	}
 
 	/**
