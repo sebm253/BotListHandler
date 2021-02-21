@@ -34,6 +34,7 @@ public class BLHEventListener extends ListenerAdapter {
 
 	@Override
 	public void onReady(ReadyEvent event) {
+		System.out.println("here");
 		botListHandler.updateAllStats(event.getJDA());
 	}
 
