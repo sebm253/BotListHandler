@@ -104,6 +104,7 @@ public class BotListHandler {
 						}
 						logger.error("Failed to update stats for bot list {} with code {}", botListName, code);
 					}
+					response.close();
 				}
 			});
 		});
