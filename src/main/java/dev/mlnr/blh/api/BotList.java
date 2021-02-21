@@ -1,13 +1,16 @@
 package dev.mlnr.blh.api;
 
 public enum BotList {
-	TOP_GG("https://top.gg/api/bots/%s/stats", "server_count"),
 	BOTLIST_SPACE("https://api.botlist.space/v1/bots/%s", "server_count"),
-	DBOATS("https://discord.boats/api/bot/%s", "server_count"),
-	DSERVICES("https://api.discordservices.net/bot/%s/stats", "servers"),
-	DBOTS_GG("https://discord.bots.gg/api/v1/bots/%s/stats", "guildCount"),
+	BOTS_FOR_DISCORD("https://botsfordiscord.com/api/bot/%s", "server_count"),
+	BOTS_ON_DISCORD("https://bots.ondiscord.xyz/bot-api/bots/%s/guilds", "guildCount"),
 	DBL("https://discordbotlist.com/api/v1/bots/%s/stats", "guilds"),
-	DEL("https://api.discordextremelist.xyz/v2/bot/%s/stats", "guildCount");
+	DBOATS("https://discord.boats/api/bot/%s", "server_count"),
+	DBOTS_CO("https://api.discordbots.co/v1/public/bot/%s/stats", "serverCount"),
+	DBOTS_GG("https://discord.bots.gg/api/v1/bots/%s/stats", "guildCount"),
+	DEL("https://api.discordextremelist.xyz/v2/bot/%s/stats", "guildCount"),
+	DSERVICES("https://api.discordservices.net/bot/%s/stats", "servers"),
+	TOP_GG("https://top.gg/api/bots/%s/stats", "server_count");
 
 	private final String url;
 	private final String serversParam;
