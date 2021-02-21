@@ -35,16 +35,19 @@ public class BLHEventListener extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		botListHandler.updateAllStats(event.getJDA());
+		System.out.println("here 1");
 	}
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
 		botListHandler.updateAllStats(event.getJDA());
+		System.out.println("here 2");
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
 		botListHandler.updateAllStats(event.getJDA());
+		System.out.println("here 3");
 	}
 
 	// unavailable guilds
@@ -52,10 +55,12 @@ public class BLHEventListener extends ListenerAdapter {
 	@Override
 	public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event) {
 		botListHandler.updateAllStats(event.getJDA());
+		System.out.println("here 4");
 	}
 
 	@Override
 	public void onUnavailableGuildLeave(UnavailableGuildLeaveEvent event) {
 		botListHandler.updateAllStats(event.getJDA());
+		System.out.println("here 5");
 	}
 }
