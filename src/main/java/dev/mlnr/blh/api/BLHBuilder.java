@@ -139,7 +139,7 @@ public class BLHBuilder {
 	 * @throws IllegalArgumentException
 	 *         If the provided unit is {@code null}
 	 * @throws IllegalStateException
-	 *         If provided unit is smaller than seconds
+	 *         If the provided unit is smaller than seconds
 	 *
 	 * @see    #BLHBuilder(JDA)
 	 * @see    #BLHBuilder(JDA, Map)
