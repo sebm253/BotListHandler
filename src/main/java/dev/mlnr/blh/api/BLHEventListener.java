@@ -21,7 +21,7 @@ public class BLHEventListener extends ListenerAdapter {
 	 * {@link net.dv8tion.jda.api.JDABuilder#addEventListeners(Object...) JDABuilder#addEventListeners} method.</b>
 	 *
 	 * @param  botListHandler
-	 *         The {@link BotListHandler} instance built by a {@link BLHBuilder}.
+	 *         The {@link BotListHandler} instance built by a {@link BLHBuilder}
 	 *
 	 * @throws IllegalStateException
 	 *         If the provided {@link BotListHandler} instance uses autoposting
@@ -34,7 +34,6 @@ public class BLHEventListener extends ListenerAdapter {
 
 	@Override
 	public void onReady(ReadyEvent event) {
-		System.out.println("here");
 		botListHandler.updateAllStats(event.getJDA());
 	}
 

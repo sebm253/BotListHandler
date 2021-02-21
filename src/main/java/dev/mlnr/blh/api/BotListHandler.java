@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
@@ -26,6 +27,7 @@ public class BotListHandler {
 	private long previousGuildCount = -1;
 
 	BotListHandler(Map<BotList, String> botListMap, AutoPostingConfig autoPostingConfig) {
+		java.util.logging.Logger.getLogger(OkHttpClient.class.getName()).setLevel(Level.FINE);
 		logger.info("map size {}", botListMap.size());
 		this.botLists = botListMap;
 		this.autoPostingConfig = autoPostingConfig;
