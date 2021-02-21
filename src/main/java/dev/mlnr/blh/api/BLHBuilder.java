@@ -154,7 +154,8 @@ public class BLHBuilder {
 	 * <br>If you use autoposting, this will start the posting scheduler.
 	 * Additionally, if provided JDA object was passed before JDA has been ready, this will wait the provided delay to update the stats for the first time.
 	 *
-	 * <br>Returned instance can be used to be passed into the {@link BLHEventListener} constructor to use event based updating.
+	 * <br>Returned instance can be used to be passed into the {@link BLHEventListener} constructor to use event based updating or to
+	 * hotswap invalid tokens at runtime.
 	 *
 	 * @throws IllegalArgumentException
 	 *         If no bot lists were added
