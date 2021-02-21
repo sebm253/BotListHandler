@@ -1,4 +1,4 @@
-package dev.mlnr.blh.internal.objects;
+package dev.mlnr.blh.internal.config;
 
 import net.dv8tion.jda.api.JDA;
 

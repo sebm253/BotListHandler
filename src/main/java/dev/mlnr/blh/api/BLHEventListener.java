@@ -7,9 +7,25 @@ import net.dv8tion.jda.api.events.guild.UnavailableGuildJoinedEvent;
 import net.dv8tion.jda.api.events.guild.UnavailableGuildLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * A listener which is used to update bot stats when bot is ready or joins or leaves a guild.
+ */
 public class BLHEventListener extends ListenerAdapter {
 	private final BotListHandler botListHandler;
 
+	/**
+	 * Constructs a new event listener used to update bot stats.
+	 *
+	 * <br>The stats will be updated when the bot joins/leaves a guild.
+	 * <b>Additionally, if you want to update the stats when the bot is ready, you need to register this listener using the
+	 * {@link net.dv8tion.jda.api.JDABuilder#addEventListeners(Object...) JDABuilder#addEventListeners} method.</b>
+	 *
+	 * @param  botListHandler
+	 *         The {@link BotListHandler} instance built by a {@link BLHBuilder}.
+	 *
+	 * @throws IllegalStateException
+	 *         If the provided {@link BotListHandler} instance uses autoposting
+	 */
 	public BLHEventListener(BotListHandler botListHandler) {
 		if (botListHandler.isAutoPostingEnabled())
 			throw new IllegalStateException("Can only use event based updating if autoposting is disabled");
