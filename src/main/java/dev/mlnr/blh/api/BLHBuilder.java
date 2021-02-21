@@ -1,6 +1,5 @@
 package dev.mlnr.blh.api;
 
-import dev.mlnr.blh.internal.BLHImpl;
 import dev.mlnr.blh.internal.config.AutoPostingConfig;
 import dev.mlnr.blh.internal.utils.Checks;
 import net.dv8tion.jda.api.JDA;
@@ -165,6 +164,6 @@ public class BLHBuilder {
 	public BotListHandler build() {
 		Checks.notEmpty(botLists, "The bot lists map");
 
-		return new BLHImpl(botLists, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit));
+		return new BotListHandler(botLists, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit));
 	}
 }
