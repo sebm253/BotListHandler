@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-class BotListHandler {
+public class BotListHandler {
 	private final Map<BotList, String> botLists;
 	private final AutoPostingConfig autoPostingConfig;
 
