@@ -173,6 +173,7 @@ public class BLHBuilder {
 	 */
 	public BotListHandler build() {
 		Checks.notEmpty(botLists, "The bot lists map");
+		Checks.check(jda != null && autoPostDelay == 0, "You have to set the autoposting delay");
 
 		return new BotListHandler(botLists, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit));
 	}
