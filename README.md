@@ -82,7 +82,7 @@ JDA jda = JDABuilder.create("token", intents)
   
 jda.awaitReady(); // optional
 
-BotListHandler botListHandler = new BLHBuilder(jda, botLists).setBotLists(botLists)
+BotListHandler botListHandler = new BLHBuilder(jda, botLists)
   .setAutoPostDelay(20, TimeUnit.SECONDS).build();
 // or
 BotListHandler botListHandler = new BLHBuilder(jda).setBotLists(botLists)
