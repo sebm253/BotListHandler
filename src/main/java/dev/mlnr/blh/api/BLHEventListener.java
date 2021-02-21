@@ -34,28 +34,28 @@ public class BLHEventListener extends ListenerAdapter {
 
 	@Override
 	public void onReady(ReadyEvent event) {
-		botListHandler.updateStats(event.getJDA());
+		botListHandler.updateAllStats(event.getJDA());
 	}
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
-		botListHandler.updateStats(event.getJDA());
+		botListHandler.updateAllStats(event.getJDA());
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
-		botListHandler.updateStats(event.getJDA());
+		botListHandler.updateAllStats(event.getJDA());
 	}
 
 	// unavailable guilds
 
 	@Override
 	public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event) {
-		botListHandler.updateStats(event.getJDA());
+		botListHandler.updateAllStats(event.getJDA());
 	}
 
 	@Override
 	public void onUnavailableGuildLeave(UnavailableGuildLeaveEvent event) {
-		botListHandler.updateStats(event.getJDA());
+		botListHandler.updateAllStats(event.getJDA());
 	}
 }
