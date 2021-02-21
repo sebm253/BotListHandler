@@ -65,7 +65,7 @@ BotListHandler botListHandler = new BLHBuilder().setBotLists(botLists).build();
 
 There are 2 ways to use BotListHandler:
 
-### Event based
+### Event based (recommended)
 
 ```java
 JDA jda = JDABuilder.create("token", intents)
