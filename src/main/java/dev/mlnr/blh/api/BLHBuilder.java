@@ -1,6 +1,7 @@
 package dev.mlnr.blh.api;
 
 import dev.mlnr.blh.internal.config.AutoPostingConfig;
+import dev.mlnr.blh.internal.config.LoggingConfig;
 import dev.mlnr.blh.internal.utils.Checks;
 import net.dv8tion.jda.api.JDA;
 
@@ -15,6 +16,9 @@ public class BLHBuilder {
 	private JDA jda;
 	private long autoPostDelay;
 	private TimeUnit autoPostUnit;
+
+	private boolean successLoggingEnabled = true;
+	private boolean ratelimitedLoggingEnabled = true;
 
 	/**
 	 * Creates a BLHBuilder.
@@ -158,6 +162,36 @@ public class BLHBuilder {
 	}
 
 	/**
+	 * Enables/disables logging of successfully updating stats for a bot list.
+	 *
+	 * <br>Default: {@code true}
+	 *
+	 * @param enabled
+	 *        Whether successfully updating stats should be logged
+	 *
+	 * @return This BLHBuilder instance
+	 */
+	public BLHBuilder setSuccessLoggingEnabled(boolean enabled) {
+		this.successLoggingEnabled = enabled;
+		return this;
+	}
+
+	/**
+	 * Enables/disables logging of getting ratelimited.
+	 *
+	 * <br>Default: {@code true}
+	 *
+	 * @param enabled
+	 *        Whether getting ratelimited should be logged
+	 *
+	 * @return This BLHBuilder instance
+	 */
+	public BLHBuilder setRatelimitedLoggingEnabled(boolean enabled) {
+		this.ratelimitedLoggingEnabled = enabled;
+		return this;
+	}
+
+	/**
 	 * Builds BotListHandler.
 	 *
 	 * <br>If you use autoposting, this will start the posting scheduler.
@@ -175,6 +209,6 @@ public class BLHBuilder {
 		Checks.notEmpty(botLists, "The bot lists map");
 		Checks.check(jda != null && autoPostDelay == 0, "You have to set the autoposting delay");
 
-		return new BotListHandler(botLists, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit));
+		return new BotListHandler(botLists, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit), new LoggingConfig(successLoggingEnabled, ratelimitedLoggingEnabled));
 	}
 }

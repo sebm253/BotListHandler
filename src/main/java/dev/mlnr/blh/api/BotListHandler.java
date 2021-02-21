@@ -1,6 +1,7 @@
 package dev.mlnr.blh.api;
 
 import dev.mlnr.blh.internal.config.AutoPostingConfig;
+import dev.mlnr.blh.internal.config.LoggingConfig;
 import dev.mlnr.blh.internal.utils.Checks;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
 	private final AutoPostingConfig autoPostingConfig;
+	private final LoggingConfig loggingConfig;
 
 	private static final Logger logger = LoggerFactory.getLogger(BotListHandler.class);
 	private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor();
@@ -25,9 +27,10 @@ public class BotListHandler {
 
 	private long previousGuildCount = -1;
 
-	BotListHandler(Map<BotList, String> botListMap, AutoPostingConfig autoPostingConfig) {
+	BotListHandler(Map<BotList, String> botListMap, AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
 		this.botLists = botListMap;
 		this.autoPostingConfig = autoPostingConfig;
+		this.loggingConfig = loggingConfig;
 
 		if (isAutoPostingEnabled()) {
 			JDA jda = autoPostingConfig.getJDA();
@@ -95,7 +98,7 @@ public class BotListHandler {
 			@Override
 			public void onResponse(Call call, Response response) {
 				response.close();
-				if (response.isSuccessful()) {
+				if (response.isSuccessful() && loggingConfig.isSuccessLoggingEnabled()) {
 					logger.info("Successfully updated stats for bot list {}", botListName);
 				}
 				else {
@@ -106,7 +109,9 @@ public class BotListHandler {
 						return;
 					}
 					if (code == 429) {
-						logger.warn("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
+						if (loggingConfig.isRatelimitedLoggingEnabled()) {
+							logger.warn("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
+						}
 						SCHEDULER.schedule(() -> updateStats(botList, token, jda, serverCount), 15, TimeUnit.SECONDS);
 						return;
 					}
