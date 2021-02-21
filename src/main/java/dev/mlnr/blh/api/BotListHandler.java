@@ -31,6 +31,7 @@ public class BotListHandler {
 		this.autoPostingConfig = autoPostingConfig;
 
 		if (isAutoPostingEnabled()) {
+			logger.info("here");
 			JDA jda = autoPostingConfig.getJDA();
 			long delay = autoPostingConfig.getDelay();
 			long initialDelay = delay;
