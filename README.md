@@ -71,7 +71,7 @@ There are 2 ways to use BotListHandler:
 
 ```java
 JDA jda = JDABuilder.create("token", intents)
-  .addEventListeners(new BLHListener(botListHandler))
+  .addEventListeners(new BLHEventListener(botListHandler))
   .build();
   
 jda.awaitReady(); // optional, but if you want to update the stats after a ReadyEvent, it's required
