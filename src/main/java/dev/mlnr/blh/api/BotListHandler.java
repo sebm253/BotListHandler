@@ -73,7 +73,7 @@ public class BotListHandler {
 	}
 
 	void updateAllStats(JDA jda) {
-		if (!devModePredicate.test(jda)) {
+		if (devModePredicate.test(jda)) {
 			return;
 		}
 		long serverCount = jda.getGuildCache().size();
