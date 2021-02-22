@@ -4,6 +4,8 @@ This handler requires [JDA](https://github.com/DV8FromTheWorld/JDA), so if your 
 
 ## Getting started
 
+### Replace `%VERSION%` with the latest release tag: [![Release](https://jitpack.io/v/caneleex/BotListHandler.svg)](https://jitpack.io/#caneleex/BotListHandler)
+
 **Gradle**
 ```gradle
 repositories {
@@ -13,7 +15,7 @@ repositories {
 }
 
 dependencies {
-  implementation group: 'com.github.caneleex', name: 'BotListHandler', version: 'latest release tag'
+  implementation group: 'com.github.caneleex', name: 'BotListHandler', version: '%VERSION%'
 }
 ```
 
@@ -31,7 +33,7 @@ dependencies {
   <dependency>
     <groupId>com.github.caneleex</groupId>
     <artifactId>BotListHandler</artifactId>
-    <version>latest release tag</version>
+    <version>%VERSION%</version>
   </dependency>
 </dependencies>
 ```
