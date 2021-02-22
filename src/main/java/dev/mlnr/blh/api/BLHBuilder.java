@@ -192,7 +192,7 @@ public class BLHBuilder {
 
 	/**
 	 * Sets the predicate which will be tested for dev mode.
-	 * <br><b>If testing of the predicate evaluates to {@code true}, BotListHandler will keep updating stats.</b>
+	 * <br><b>If testing of the predicate evaluates to {@code false}, BotListHandler will keep updating stats.</b>
 	 *
 	 * @param  predicate
 	 *         The predicate to test dev mode for
