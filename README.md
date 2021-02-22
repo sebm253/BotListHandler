@@ -114,3 +114,7 @@ BotListHandler botListHandler = new BLHBuilder(jda).setBotLists(botLists)
 [discordservices.net](https://discordservices.net)
 
 [top.gg](https://top.gg)
+
+## Troubleshooting
+
+Please visit the [wiki](https://github.com/caneleex/BotListHandler/wiki/Troubleshooting) for troubleshooting steps. If the wiki doesn't contain a problem you're having, [open a new issue](https://github.com/caneleex/BotListHandler/issues/new).
