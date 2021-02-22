@@ -48,7 +48,7 @@ BotListHandler botListHandler = new BLHBuilder().addBotList(BotList.TOP_GG, "top
 ```
 Using the constructor:
 ```java
-Map<BotList, String> botLists = new HashMap<>();
+Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 botLists.put(BotList.DBL, "dbl_token");
 botLists.put(BotList.DEL, "del_token");
 
@@ -56,7 +56,7 @@ BotListHandler botListHandler = new BLHBuilder(botLists).build();
 ```
 Using the `setBotLists` method:
 ```java
-Map<BotList, String> botLists = new HashMap<>();
+Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 botLists.put(BotList.BOTLIST_SPACE, "botlist_space_token");
 botLists.put(BotList.DBOTS_GG, "dbots_gg_token");
 
