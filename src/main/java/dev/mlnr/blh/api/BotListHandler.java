@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
 	private final Predicate<JDA> devModePredicate;
+	private final boolean unavailableEventsEnabled;
 	private final AutoPostingConfig autoPostingConfig;
 	private final LoggingConfig loggingConfig;
 
@@ -29,9 +30,11 @@ public class BotListHandler {
 
 	private long previousGuildCount = -1;
 
-	BotListHandler(Map<BotList, String> botListMap, Predicate<JDA> devModePredicate, AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
+	BotListHandler(Map<BotList, String> botListMap, Predicate<JDA> devModePredicate, boolean unavailableEventsEnabled,
+	               AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
 		this.botLists = botListMap;
 		this.devModePredicate = devModePredicate;
+		this.unavailableEventsEnabled = unavailableEventsEnabled;
 		this.autoPostingConfig = autoPostingConfig;
 		this.loggingConfig = loggingConfig;
 
@@ -70,6 +73,10 @@ public class BotListHandler {
 
 	boolean isAutoPostingEnabled() {
 		return autoPostingConfig.isAutoPostingEnabled();
+	}
+
+	boolean isUnavailableEventsHandlingEnabled() {
+		return unavailableEventsEnabled;
 	}
 
 	void updateAllStats(JDA jda) {

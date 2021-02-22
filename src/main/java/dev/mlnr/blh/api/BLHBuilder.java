@@ -23,6 +23,8 @@ public class BLHBuilder {
 
 	private Predicate<JDA> devModePredicate = jda -> false;
 
+	private boolean unavailableEventsEnabled = true;
+
 	/**
 	 * Creates a BLHBuilder.
 	 *
@@ -207,6 +209,23 @@ public class BLHBuilder {
 	}
 
 	/**
+	 * Sets whether handling of join/leave events for unavailable guilds should be enabled.
+	 * <br><b>Discord seems to keep sending one GUILD_DELETE event for an unavailable guild every time you boot up the bot,
+	 * which results in BotListHandler updating the count twice at startup.</b>
+	 *
+	 * <br>Default: {@code true}
+	 *
+	 * @param  enabled
+	 *         Whether handling of join/leave events for unavailable guilds should be enabled
+	 *
+	 * @return This BLHBuilder instance
+	 */
+	public BLHBuilder setUnavailableEventsEnabled(boolean enabled) {
+		this.unavailableEventsEnabled = enabled;
+		return this;
+	}
+
+	/**
 	 * Builds BotListHandler.
 	 *
 	 * <br>If you use autoposting, this will start the posting scheduler.
@@ -224,7 +243,7 @@ public class BLHBuilder {
 		Checks.notEmpty(botLists, "The bot lists map");
 		Checks.check(jda != null && autoPostDelay == 0, "You have to set the autoposting delay");
 
-		return new BotListHandler(botLists, devModePredicate, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit),
+		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit),
 				new LoggingConfig(successLoggingEnabled, ratelimitedLoggingEnabled));
 	}
 }
