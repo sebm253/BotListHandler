@@ -15,9 +15,11 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
+	private final Predicate<JDA> devModePredicate;
 	private final AutoPostingConfig autoPostingConfig;
 	private final LoggingConfig loggingConfig;
 
@@ -27,8 +29,9 @@ public class BotListHandler {
 
 	private long previousGuildCount = -1;
 
-	BotListHandler(Map<BotList, String> botListMap, AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
+	BotListHandler(Map<BotList, String> botListMap, Predicate<JDA> devModePredicate, AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
 		this.botLists = botListMap;
+		this.devModePredicate = devModePredicate;
 		this.autoPostingConfig = autoPostingConfig;
 		this.loggingConfig = loggingConfig;
 
@@ -70,6 +73,9 @@ public class BotListHandler {
 	}
 
 	void updateAllStats(JDA jda) {
+		if (!devModePredicate.test(jda)) {
+			return;
+		}
 		long serverCount = jda.getGuildCache().size();
 		if (serverCount == previousGuildCount) {
 			logger.info("No stats updating was necessary.");
