@@ -1,11 +1,14 @@
 package dev.mlnr.blh.api;
 
+import dev.mlnr.blh.internal.utils.Checks;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.UnavailableGuildJoinedEvent;
 import net.dv8tion.jda.api.events.guild.UnavailableGuildLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import javax.annotation.Nonnull;
 
 /**
  * A listener which is used to update bot stats when bot is ready or joins or leaves a guild.
@@ -23,10 +26,14 @@ public class BLHEventListener extends ListenerAdapter {
 	 * @param  botListHandler
 	 *         The {@link BotListHandler} instance built by a {@link BLHBuilder}
 	 *
+	 * @throws IllegalArgumentException
+	 *         If the provided {@link BotListHandler} instance is {@code null}
 	 * @throws IllegalStateException
 	 *         If the provided {@link BotListHandler} instance uses autoposting
 	 */
-	public BLHEventListener(BotListHandler botListHandler) {
+	public BLHEventListener(@Nonnull BotListHandler botListHandler) {
+		Checks.notNull(botListHandler, "The BotListHandler instance");
+
 		if (botListHandler.isAutoPostingEnabled())
 			throw new IllegalStateException("Can only use event based updating if autoposting is disabled");
 		this.botListHandler = botListHandler;
