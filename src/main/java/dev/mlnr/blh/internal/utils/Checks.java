@@ -25,7 +25,7 @@ public class Checks {
 
 	public static void notEmpty(String string, String name) {
 		notNull(string, name);
-		if (string.isBlank())
+		if (string.isEmpty())
 			throw new IllegalStateException(name + " may not be empty");
 	}
 
