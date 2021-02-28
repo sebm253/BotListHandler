@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,8 @@ public class BotListHandler {
 	private static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor();
 	private final OkHttpClient httpClient = new OkHttpClient();
 
+	private final Set<BotList> ratelimitedBotLists;
+
 	private long previousGuildCount = -1;
 
 	BotListHandler(Map<BotList, String> botListMap, Predicate<JDA> devModePredicate, boolean unavailableEventsEnabled,
@@ -37,6 +41,7 @@ public class BotListHandler {
 		this.unavailableEventsEnabled = unavailableEventsEnabled;
 		this.autoPostingConfig = autoPostingConfig;
 		this.loggingConfig = loggingConfig;
+		this.ratelimitedBotLists = EnumSet.noneOf(BotList.class);
 
 		if (isAutoPostingEnabled()) {
 			JDA jda = autoPostingConfig.getJDA();
@@ -89,10 +94,12 @@ public class BotListHandler {
 		}
 		previousGuildCount = serverCount;
 
-		botLists.forEach((botList, token) -> updateStats(botList, token, jda, serverCount));
+		botLists.forEach((botList, token) -> updateStats(botList, token, jda, serverCount, false));
 	}
 
-	void updateStats(BotList botList, String token, JDA jda, long serverCount) {
+	void updateStats(BotList botList, String token, JDA jda, long serverCount, boolean retriedRequest) {
+		if (ratelimitedBotLists.contains(botList) && !retriedRequest)
+			return;
 		String botListName = botList.name();
 		DataObject payload = DataObject.empty().put(botList.getServersParam(), serverCount);
 
@@ -112,6 +119,7 @@ public class BotListHandler {
 				response.close();
 				if (response.isSuccessful() && loggingConfig.isSuccessLoggingEnabled()) {
 					logger.info("Successfully updated stats for bot list {}", botListName);
+					ratelimitedBotLists.remove(botList); // if the bot list isn't ratelimited, nothing will happen
 				}
 				else {
 					int code = response.code();
@@ -124,7 +132,8 @@ public class BotListHandler {
 						if (loggingConfig.isRatelimitedLoggingEnabled()) {
 							logger.warn("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
 						}
-						SCHEDULER.schedule(() -> updateStats(botList, token, jda, serverCount), 15, TimeUnit.SECONDS);
+						ratelimitedBotLists.add(botList);
+						SCHEDULER.schedule(() -> updateStats(botList, token, jda, serverCount, true), 15, TimeUnit.SECONDS);
 						return;
 					}
 					logger.error("Failed to update stats for bot list {} with code {}", botListName, code);
