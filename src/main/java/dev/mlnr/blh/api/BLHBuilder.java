@@ -103,8 +103,7 @@ public class BLHBuilder {
 	 * @return This BLHBuilder instance
 	 */
 	public BLHBuilder addBotList(@Nonnull BotList botList, @Nonnull String token) {
-		Checks.notNull(botList, "The bot list");
-		Checks.notEmpty(token, "The bot list token");
+		Checks.checkListAndToken(botList, token);
 
 		botLists.put(botList, token);
 		return this;
@@ -123,6 +122,7 @@ public class BLHBuilder {
 	 */
 	public BLHBuilder setBotLists(@Nonnull Map<BotList, String> botLists) {
 		Checks.notEmpty(botLists, "The bot lists map");
+		botLists.forEach((botList, token) -> Checks.checkToken(token));
 
 		this.botLists = botLists;
 		return this;
@@ -232,7 +232,7 @@ public class BLHBuilder {
 	 * Additionally, if provided JDA object was passed before JDA has been ready, this will wait the provided delay to update the stats for the first time.
 	 *
 	 * <br>Returned instance can be used to be passed into the {@link BLHEventListener} constructor to use event based updating or to
-	 * hotswap invalid tokens at runtime.
+	 * add bot lists or hotswap invalid tokens at runtime.
 	 *
 	 * @throws IllegalArgumentException
 	 *         If no bot lists were added

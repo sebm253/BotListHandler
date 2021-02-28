@@ -54,6 +54,23 @@ public class BotListHandler {
 	}
 
 	/**
+	 * Used to add bot lists at runtime.
+	 *
+	 * @param  botList
+	 *         The bot list to add
+	 * @param  token
+	 *         The token for the bot list
+	 *
+	 * @throws IllegalArgumentException
+	 *         If the provided bot list or token is {@code null} or empty
+	 */
+	public void addBotList(@Nonnull BotList botList, @Nonnull String token) {
+		Checks.checkListAndToken(botList, token);
+
+		botLists.put(botList, token);
+	}
+
+	/**
 	 * Used to hotswap invalid tokens at runtime.
 	 *
 	 * @param  botList
@@ -61,17 +78,17 @@ public class BotListHandler {
 	 * @param  newToken
 	 *         The new token to use for the provided bot list
 	 *
-	 * @throws IllegalArgumentException
-	 *         If the provided bot list or token is {@code null} or empty
+	 * @throws IllegalStateException
+	 *         If the bot list hasn't been added
 	 * @throws IllegalStateException
 	 *         If the provided token is the same as the previous one
 	 */
 	public void swapToken(@Nonnull BotList botList, @Nonnull String newToken) {
-		Checks.notNull(botList, "The bot list");
-		Checks.notEmpty(newToken, "The bot list token");
-		Checks.check(botLists.get(botList).equals(newToken), "The new token may not be the same as the previous one");
+		String previousToken = botLists.get(botList);
+		Checks.check(previousToken == null, "The bot list hasn't been added");
+		Checks.check(previousToken.equals(newToken), "The new token may not be the same as the previous one");
 
-		botLists.put(botList, newToken);
+		addBotList(botList, newToken);
 	}
 
 	// "internal" methods

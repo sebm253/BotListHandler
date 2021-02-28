@@ -1,5 +1,7 @@
 package dev.mlnr.blh.internal.utils;
 
+import dev.mlnr.blh.api.BotList;
+
 import java.util.Map;
 
 public class Checks {
@@ -23,7 +25,16 @@ public class Checks {
 
 	public static void notEmpty(String string, String name) {
 		notNull(string, name);
-		if (string.isEmpty())
+		if (string.isBlank())
 			throw new IllegalStateException(name + " may not be empty");
+	}
+
+	public static void checkListAndToken(BotList botList, String token) {
+		notNull(botList, "The bot list");
+		checkToken(token);
+	}
+
+	public static void checkToken(String token) {
+		notEmpty(token, "The bot list token");
 	}
 }
