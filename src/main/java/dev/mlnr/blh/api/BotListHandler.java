@@ -134,8 +134,9 @@ public class BotListHandler {
 			@Override
 			public void onResponse(Call call, Response response) {
 				response.close();
-				if (response.isSuccessful() && loggingConfig.isSuccessLoggingEnabled()) {
-					logger.info("Successfully updated stats for bot list {}", botListName);
+				if (response.isSuccessful()) {
+					if (loggingConfig.isSuccessLoggingEnabled())
+						logger.info("Successfully updated stats for bot list {}", botListName);
 					ratelimitedBotLists.remove(botList); // if the bot list isn't ratelimited, nothing will happen
 				}
 				else {
@@ -146,9 +147,8 @@ public class BotListHandler {
 						return;
 					}
 					if (code == 429) {
-						if (loggingConfig.isRatelimitedLoggingEnabled()) {
+						if (loggingConfig.isRatelimitedLoggingEnabled())
 							logger.warn("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
-						}
 						ratelimitedBotLists.add(botList);
 						SCHEDULER.schedule(() -> updateStats(botList, token, jda, serverCount, true), 15, TimeUnit.SECONDS);
 						return;
