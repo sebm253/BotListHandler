@@ -91,7 +91,7 @@ BotListHandler botListHandler = new BLHBuilder(jda).setBotLists(botLists)
   .setAutoPostDelay(3, TimeUnit.MINUTES).build();
 ```
 
-### You can store the `BotListHandler` instance so if some token provided at compile-time is invalid, you can use the `swapToken` method to hotswap it at runtime.
+### You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.
 
 ## Currently supported bot lists
 
