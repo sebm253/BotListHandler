@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
+/**
+ * A builder used to build a {@link BotListHandler} instance.
+ */
 public class BLHBuilder {
 	private Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 
@@ -29,7 +32,7 @@ public class BLHBuilder {
 	 * Creates a BLHBuilder.
 	 *
 	 * <br><b>This type of builder can only be used for event based stats updating.</b>
-	 * You can add bot lists by using one of provided methods.
+	 * Bot lists can be added by using one of provided methods.
 	 *
 	 * @see #BLHBuilder(Map)
 	 */
@@ -39,7 +42,7 @@ public class BLHBuilder {
 	 * Creates a BLHBuilder.
 	 *
 	 * <br><b>This type of builder can only be used for automatic stats posting.</b>
-	 * You can add bot lists by using one of provided methods.
+	 * Bot lists can be added by using one of provided methods.
 	 *
 	 * @param  jda
 	 *         The JDA object to get the guild amount from
@@ -130,6 +133,7 @@ public class BLHBuilder {
 
 	/**
 	 * Sets the autoposting delay.
+	 *
 	 * <br><b>This is only for when using a builder for automatic stats posting.</b>
 	 *
 	 * @param  delay
@@ -194,6 +198,7 @@ public class BLHBuilder {
 
 	/**
 	 * Sets the predicate which will be tested for dev mode.
+	 *
 	 * <br><b>If testing of the predicate evaluates to {@code false}, BotListHandler will keep updating stats.</b>
 	 *
 	 * @param  predicate
@@ -210,8 +215,9 @@ public class BLHBuilder {
 
 	/**
 	 * Sets whether handling of join/leave events for unavailable guilds should be enabled.
-	 * <br><b>Discord seems to keep sending one GUILD_DELETE event for an unavailable guild every time you boot up the bot,
-	 * which results in BotListHandler updating the count twice at startup.</b>
+	 *
+	 * <br><b>Discord seems to keep sending one GUILD_DELETE event for an unavailable guild every time the bot starts
+	 * resulting in BotListHandler updating the count twice at startup.</b>
 	 *
 	 * <br>Default: {@code true}
 	 *
@@ -228,7 +234,7 @@ public class BLHBuilder {
 	/**
 	 * Builds BotListHandler.
 	 *
-	 * <br>If you use autoposting, this will start the posting scheduler.
+	 * <br>If autoposting is used, this will start the posting scheduler.
 	 * Additionally, if provided JDA object was passed before JDA has been ready, this will wait the provided delay to update the stats for the first time.
 	 *
 	 * <br>Returned instance can be used to be passed into the {@link BLHEventListener} constructor to use event based updating or to
@@ -241,7 +247,7 @@ public class BLHBuilder {
 	 */
 	public BotListHandler build() {
 		Checks.notEmpty(botLists, "The bot lists map");
-		Checks.check(jda != null && autoPostDelay == 0, "You have to set the autoposting delay");
+		Checks.check(jda != null && autoPostDelay == 0, "The autoposting delay has to be set");
 
 		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit),
 				new LoggingConfig(successLoggingEnabled, ratelimitedLoggingEnabled));
