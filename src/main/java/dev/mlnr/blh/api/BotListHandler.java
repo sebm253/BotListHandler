@@ -31,6 +31,7 @@ public class BotListHandler {
 	private final OkHttpClient httpClient = new OkHttpClient();
 
 	private final Set<BotList> ratelimitedBotLists;
+	private final Set<BotList> unauthorizedBotLists;
 
 	private long previousGuildCount = -1;
 
@@ -42,6 +43,7 @@ public class BotListHandler {
 		this.autoPostingConfig = autoPostingConfig;
 		this.loggingConfig = loggingConfig;
 		this.ratelimitedBotLists = EnumSet.noneOf(BotList.class);
+		this.unauthorizedBotLists = EnumSet.noneOf(BotList.class);
 
 		if (isAutoPostingEnabled()) {
 			JDA jda = autoPostingConfig.getJDA();
@@ -89,6 +91,7 @@ public class BotListHandler {
 		Checks.check(previousToken.equals(newToken), "The new token may not be the same as the previous one");
 
 		addBotList(botList, newToken);
+		unauthorizedBotLists.remove(botList); // if the bot list isn't unauthorized, nothing will happen
 	}
 
 	// "internal" methods
@@ -142,8 +145,14 @@ public class BotListHandler {
 				else {
 					int code = response.code();
 					if (code == 401) {
-						logger.error("Failed to update stats for bot list {} as the provided token is invalid. " +
-								"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
+						if (unauthorizedBotLists.contains(botList)) {
+							logger.warn("Dropping stats update for bot list {} as the provided token is invalid. " +
+									"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
+						}
+						else {
+							logger.error("Failed to update stats for bot list {} as the provided token is invalid. " +
+									"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
+						}
 						return;
 					}
 					if (code == 429) {
