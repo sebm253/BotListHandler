@@ -121,6 +121,11 @@ public class BotListHandler {
 		if (ratelimitedBotLists.contains(botList) && !retriedRequest)
 			return;
 		String botListName = botList.name();
+		if (unauthorizedBotLists.contains(botList)) {
+			logger.warn("Dropping stats update for bot list {} as the provided token is invalid. " +
+					"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
+			return;
+		}
 		DataObject payload = DataObject.empty().put(botList.getServersParam(), serverCount);
 
 		String url = String.format(botList.getUrl(), jda.getSelfUser().getId());
@@ -145,14 +150,9 @@ public class BotListHandler {
 				else {
 					int code = response.code();
 					if (code == 401) {
-						if (unauthorizedBotLists.contains(botList)) {
-							logger.warn("Dropping stats update for bot list {} as the provided token is invalid. " +
+						logger.error("Failed to update stats for bot list {} as the provided token is invalid. " +
 									"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
-						}
-						else {
-							logger.error("Failed to update stats for bot list {} as the provided token is invalid. " +
-									"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
-						}
+						unauthorizedBotLists.add(botList);
 						return;
 					}
 					if (code == 429) {
