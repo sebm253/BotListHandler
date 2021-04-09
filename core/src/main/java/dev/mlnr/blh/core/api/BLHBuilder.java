@@ -156,7 +156,7 @@ public class BLHBuilder {
 	 * @return This BLHBuilder instance
 	 */
 	public BLHBuilder setAutoPostDelay(long delay, @Nonnull TimeUnit unit) {
-		Checks.check(this.updater == null, "The updater instance may not be null");
+		Checks.check(this.updater == null, "The updater instance has to be set to use autoposting");
 		Checks.check(delay < 1, "The delay cannot be less than 1");
 		Checks.notNull(unit, "The time unit");
 		Checks.check(unit.ordinal() < TimeUnit.SECONDS.ordinal(), "The time unit cannot be smaller than seconds");
