@@ -1,0 +1,12 @@
+repositories {
+    maven {
+        url 'https://m2.dv8tion.net/releases'
+    }
+}
+
+dependencies {
+    implementation project(":core")
+    compileOnly("net.dv8tion:JDA:4.2.1_255") {
+        exclude group: 'club.minnced', module: 'opus-java'
+    }
+}
