@@ -1,4 +1,4 @@
-package dev.mlnr.blh.api;
+package dev.mlnr.blh.core.api;
 
 public enum BotList {
 	BOTLIST_SPACE("https://api.botlist.space/v1/bots/%s", "server_count"),

@@ -1,9 +1,8 @@
-package dev.mlnr.blh.api;
+package dev.mlnr.blh.core.api;
 
-import dev.mlnr.blh.internal.config.AutoPostingConfig;
-import dev.mlnr.blh.internal.config.LoggingConfig;
-import dev.mlnr.blh.internal.utils.Checks;
-import net.dv8tion.jda.api.JDA;
+import dev.mlnr.blh.core.internal.config.AutoPostingConfig;
+import dev.mlnr.blh.core.internal.config.LoggingConfig;
+import dev.mlnr.blh.core.internal.utils.Checks;
 
 import javax.annotation.Nonnull;
 import java.util.EnumMap;
@@ -14,24 +13,25 @@ import java.util.function.Predicate;
 /**
  * A builder used to build a {@link BotListHandler} instance.
  */
+@SuppressWarnings({"FieldHasSetterButNoGetter", "unused"})
 public class BLHBuilder {
 	private Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 
-	private JDA jda;
+	private IBLHUpdater updater;
 	private long autoPostDelay;
 	private TimeUnit autoPostUnit;
 
 	private boolean successLoggingEnabled = true;
 	private boolean ratelimitedLoggingEnabled = true;
 
-	private Predicate<JDA> devModePredicate = jda -> false;
+	private Predicate<IBLHUpdater> devModePredicate = o -> false;
 
 	private boolean unavailableEventsEnabled = true;
 
 	/**
 	 * Creates a BLHBuilder.
 	 *
-	 * <br><b>This type of builder can only be used for event based stats updating.</b>
+	 * <br><b>This type of builder can only be used for event based stats updating or updating by hand.</b>
 	 * Bot lists can be added by using one of provided methods.
 	 *
 	 * @see #BLHBuilder(Map)
@@ -44,18 +44,18 @@ public class BLHBuilder {
 	 * <br><b>This type of builder can only be used for automatic stats posting.</b>
 	 * Bot lists can be added by using one of provided methods.
 	 *
-	 * @param  jda
-	 *         The JDA object to get the guild amount from
+	 * @param  updater
+	 *         The IBLHUpdater instance to get the bot id and guild amount from
 	 *
 	 * @throws IllegalArgumentException
-	 *         If the provided JDA object is {@code null}
+	 *         If the provided IBLHUpdater instance is {@code null}
 	 *
-	 * @see    #BLHBuilder(JDA, Map)
+	 * @see    #BLHBuilder(IBLHUpdater, Map)
 	 */
-	public BLHBuilder(@Nonnull JDA jda) {
-		Checks.notNull(jda, "The JDA object");
+	public BLHBuilder(@Nonnull IBLHUpdater updater) {
+		Checks.notNull(updater, "The updater instance");
 
-		this.jda = jda;
+		this.updater = updater;
 	}
 
 	/**
@@ -64,25 +64,25 @@ public class BLHBuilder {
 	 * <br><b>This type of builder can only be used for automatic stats posting.</b>
 	 * Provided map of bot lists will be used to update stats.
 	 *
-	 * @param  jda
-	 *         The JDA object to get the guild amount from
+	 * @param  updater
+	 *         The IBLHUpdater instance to get the bot id and guild amount from
 	 * @param  botLists
 	 *         The bot lists map
 	 *
 	 * @throws IllegalArgumentException
-	 *         If the provided JDA object is {@code null}
+	 *         If the provided IBLHUpdater instance is {@code null}
 	 */
-	public BLHBuilder(@Nonnull JDA jda, @Nonnull Map<BotList, String> botLists) {
-		Checks.notNull(jda, "The JDA object");
+	public BLHBuilder(@Nonnull IBLHUpdater updater, @Nonnull Map<BotList, String> botLists) {
+		Checks.notNull(updater, "The updater instance");
 		setBotLists(botLists);
 
-		this.jda = jda;
+		this.updater = updater;
 	}
 
 	/**
 	 * Creates a BLHBuilder.
 	 *
-	 * <br><b>This type of builder can only be used for event based stats updating.</b>
+	 * <br><b>This type of builder can only be used for event based stats updating or updating by hand.</b>
 	 * Provided map of bot lists will be used to update stats.
 	 *
 	 * @param  botLists
@@ -142,7 +142,7 @@ public class BLHBuilder {
 	 *         The time unit to use
 	 *
 	 * @throws IllegalArgumentException
-	 *         If no JDA object was set (using other constructor than {@link #BLHBuilder(JDA)} or {@link #BLHBuilder(JDA, Map)})
+	 *         If no updater instance was set (using other constructor than {@link #BLHBuilder(IBLHUpdater)} or {@link #BLHBuilder(IBLHUpdater, Map)})
 	 * @throws IllegalStateException
 	 *         If the provided delay is less than {@code 1}
 	 * @throws IllegalArgumentException
@@ -150,13 +150,13 @@ public class BLHBuilder {
 	 * @throws IllegalStateException
 	 *         If the provided unit is smaller than seconds
 	 *
-	 * @see    #BLHBuilder(JDA)
-	 * @see    #BLHBuilder(JDA, Map)
+	 * @see    #BLHBuilder(IBLHUpdater)
+	 * @see    #BLHBuilder(IBLHUpdater, Map)
 	 *
 	 * @return This BLHBuilder instance
 	 */
 	public BLHBuilder setAutoPostDelay(long delay, @Nonnull TimeUnit unit) {
-		Checks.notNull(this.jda, "The JDA object");
+		Checks.notNull(this.updater, "The updater instance");
 		Checks.check(delay < 1, "The delay cannot be less than 1");
 		Checks.notNull(unit, "The time unit");
 		Checks.check(unit.ordinal() < TimeUnit.SECONDS.ordinal(), "The time unit cannot be smaller than seconds");
@@ -206,7 +206,7 @@ public class BLHBuilder {
 	 *
 	 * @return This BLHBuilder instance
 	 */
-	public BLHBuilder setDevModePredicate(@Nonnull Predicate<JDA> predicate) {
+	public BLHBuilder setDevModePredicate(@Nonnull Predicate<IBLHUpdater> predicate) {
 		Checks.notNull(predicate, "The dev mode predicate");
 
 		this.devModePredicate = predicate;
@@ -217,7 +217,7 @@ public class BLHBuilder {
 	 * Sets whether handling of join/leave events for unavailable guilds should be enabled.
 	 *
 	 * <br><b>Discord seems to keep sending one GUILD_DELETE event for an unavailable guild every time the bot starts
-	 * resulting in BotListHandler updating the count twice at startup.</b>
+	 * resulting in BotListHandler updating the count twice at startup. This only affects the JDA updater.</b>
 	 *
 	 * <br>Default: {@code true}
 	 *
@@ -235,9 +235,7 @@ public class BLHBuilder {
 	 * Builds BotListHandler.
 	 *
 	 * <br>If autoposting is used, this will start the posting scheduler.
-	 * Additionally, if provided JDA object was passed before JDA has been ready, this will wait the provided delay to update the stats for the first time.
-	 *
-	 * <br>Returned instance can be used to be passed into the {@link BLHEventListener} constructor to use event based updating or to
+	 * <br>Returned instance can be used to be passed into the constructors of classes implementing {@link IBLHUpdater} to use event based updating or to
 	 * add bot lists or hotswap invalid tokens at runtime.
 	 *
 	 * @throws IllegalArgumentException
@@ -247,9 +245,9 @@ public class BLHBuilder {
 	 */
 	public BotListHandler build() {
 		Checks.notEmpty(botLists, "The bot lists map");
-		Checks.check(jda != null && autoPostDelay == 0, "The autoposting delay has to be set");
+		Checks.check(updater != null && autoPostDelay == 0, "The autoposting delay has to be set");
 
-		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(jda, autoPostDelay, autoPostUnit),
+		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(updater, autoPostDelay, autoPostUnit),
 				new LoggingConfig(successLoggingEnabled, ratelimitedLoggingEnabled));
 	}
 }

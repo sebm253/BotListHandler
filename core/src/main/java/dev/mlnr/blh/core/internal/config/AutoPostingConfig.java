@@ -1,26 +1,26 @@
-package dev.mlnr.blh.internal.config;
+package dev.mlnr.blh.core.internal.config;
 
-import net.dv8tion.jda.api.JDA;
+import dev.mlnr.blh.core.api.IBLHUpdater;
 
 import java.util.concurrent.TimeUnit;
 
 public class AutoPostingConfig {
-	private final JDA jda;
+	private final IBLHUpdater updater;
 	private final long delay;
 	private final TimeUnit unit;
 
-	public AutoPostingConfig(JDA jda, long delay, TimeUnit unit) {
-		this.jda = jda;
+	public AutoPostingConfig(IBLHUpdater updater, long delay, TimeUnit unit) {
+		this.updater = updater;
 		this.delay = delay;
 		this.unit = unit;
 	}
 
 	public boolean isAutoPostingEnabled() {
-		return jda != null;
+		return updater != null;
 	}
 
-	public JDA getJDA() {
-		return jda;
+	public IBLHUpdater getUpdater() {
+		return updater;
 	}
 
 	public long getDelay() {

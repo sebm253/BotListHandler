@@ -4,14 +4,29 @@ plugins {
 }
 
 repositories {
+    mavenCentral()
     jcenter()
+}
+
+allprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    group = 'dev.mlnr'
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
+        implementation group: 'org.json', name: 'json', version: '20210307'
+        implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
+    }
 }
 
 dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
-    compileOnly("net.dv8tion:JDA:4.2.0_228") {
-        exclude group: 'club.minnced', module: 'opus-java'
-    }
 }
 
 group = 'dev.mlnr'

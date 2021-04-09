@@ -1,4 +1,4 @@
-package dev.mlnr.blh.internal.config;
+package dev.mlnr.blh.core.internal.config;
 
 public class LoggingConfig {
 	private final boolean successLoggingEnabled;

@@ -1,6 +1,6 @@
-package dev.mlnr.blh.internal.utils;
+package dev.mlnr.blh.core.internal.utils;
 
-import dev.mlnr.blh.api.BotList;
+import dev.mlnr.blh.core.api.BotList;
 
 import java.util.Map;
 

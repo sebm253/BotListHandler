@@ -1,11 +1,10 @@
-package dev.mlnr.blh.api;
+package dev.mlnr.blh.core.api;
 
-import dev.mlnr.blh.internal.config.AutoPostingConfig;
-import dev.mlnr.blh.internal.config.LoggingConfig;
-import dev.mlnr.blh.internal.utils.Checks;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.utils.data.DataObject;
+import dev.mlnr.blh.core.internal.config.AutoPostingConfig;
+import dev.mlnr.blh.core.internal.config.LoggingConfig;
+import dev.mlnr.blh.core.internal.utils.Checks;
 import okhttp3.*;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,7 @@ import java.util.function.Predicate;
 
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
-	private final Predicate<JDA> devModePredicate;
+	private final Predicate<IBLHUpdater> devModePredicate;
 	private final boolean unavailableEventsEnabled;
 	private final AutoPostingConfig autoPostingConfig;
 	private final LoggingConfig loggingConfig;
@@ -35,7 +34,7 @@ public class BotListHandler {
 
 	private long previousGuildCount = -1;
 
-	BotListHandler(Map<BotList, String> botListMap, Predicate<JDA> devModePredicate, boolean unavailableEventsEnabled,
+	BotListHandler(Map<BotList, String> botListMap, Predicate<IBLHUpdater> devModePredicate, boolean unavailableEventsEnabled,
 	               AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
 		this.botLists = botListMap;
 		this.devModePredicate = devModePredicate;
@@ -45,14 +44,8 @@ public class BotListHandler {
 		this.ratelimitedBotLists = EnumSet.noneOf(BotList.class);
 		this.unauthorizedBotLists = EnumSet.noneOf(BotList.class);
 
-		if (isAutoPostingEnabled()) {
-			JDA jda = autoPostingConfig.getJDA();
-			long delay = autoPostingConfig.getDelay();
-			long initialDelay = delay;
-			if (jda.getStatus() == JDA.Status.INITIALIZED) // if jda has finished setting up cache for guilds, immediately post the guild count
-				initialDelay = 0;
-			SCHEDULER.scheduleAtFixedRate(() -> updateAllStats(jda), initialDelay, delay, autoPostingConfig.getUnit());
-		}
+		if (autoPostingConfig.isAutoPostingEnabled())
+			SCHEDULER.scheduleAtFixedRate(() -> updateAllStats(autoPostingConfig.getUpdater()), 0, autoPostingConfig.getDelay(), autoPostingConfig.getUnit());
 	}
 
 	/**
@@ -96,28 +89,30 @@ public class BotListHandler {
 
 	// "internal" methods
 
-	boolean isAutoPostingEnabled() {
+	public boolean isAutoPostingEnabled() {
 		return autoPostingConfig.isAutoPostingEnabled();
 	}
 
-	boolean isUnavailableEventsHandlingEnabled() {
+	public boolean isUnavailableEventsHandlingEnabled() {
 		return unavailableEventsEnabled;
 	}
 
-	void updateAllStats(JDA jda) {
-		if (devModePredicate.test(jda))
+	void updateAllStats(IBLHUpdater updater) {
+		updateAllStats(updater.getBotId(), updater.getServerCount(), updater);
+	}
+
+	public void updateAllStats(long botId, long serverCount, IBLHUpdater updater) {
+		if (devModePredicate.test(updater))
 			return;
-		long serverCount = jda.getGuildCache().size();
 		if (serverCount == previousGuildCount) {
 			logger.info("No stats updating was necessary.");
 			return;
 		}
 		previousGuildCount = serverCount;
-
-		botLists.forEach((botList, token) -> updateStats(botList, token, jda, serverCount, false));
+		botLists.forEach((botList, token) -> updateStats(botList, token, botId, serverCount, false));
 	}
 
-	void updateStats(BotList botList, String token, JDA jda, long serverCount, boolean retriedRequest) {
+	void updateStats(BotList botList, String token, long botId, long serverCount, boolean retriedRequest) {
 		if (ratelimitedBotLists.contains(botList) && !retriedRequest)
 			return;
 		String botListName = botList.name();
@@ -126,12 +121,12 @@ public class BotListHandler {
 					"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
 			return;
 		}
-		DataObject payload = DataObject.empty().put(botList.getServersParam(), serverCount);
+		JSONObject payload = new JSONObject().put(botList.getServersParam(), serverCount);
 
-		String url = String.format(botList.getUrl(), jda.getSelfUser().getId());
+		String url = String.format(botList.getUrl(), botId);
 		Request.Builder requestBuilder = new Request.Builder().url(url)
 				.header("Authorization", token)
-				.post(RequestBody.create(MediaType.parse("application/json"), payload.toString()));
+				.post(RequestBody.create(payload.toString(), MediaType.parse("application/json")));
 
 		httpClient.newCall(requestBuilder.build()).enqueue(new Callback() {
 			@Override
@@ -159,7 +154,7 @@ public class BotListHandler {
 						if (loggingConfig.isRatelimitedLoggingEnabled())
 							logger.warn("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
 						ratelimitedBotLists.add(botList);
-						SCHEDULER.schedule(() -> updateStats(botList, token, jda, serverCount, true), 15, TimeUnit.SECONDS);
+						SCHEDULER.schedule(() -> updateStats(botList, token, botId, serverCount, true), 15, TimeUnit.SECONDS);
 						return;
 					}
 					logger.error("Failed to update stats for bot list {} with code {}", botListName, code);
