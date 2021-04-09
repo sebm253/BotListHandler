@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Map;
@@ -89,10 +90,22 @@ public class BotListHandler {
 
 	// "internal" methods
 
+	/**
+	 * Returns whether automatic stats posting is enabled.
+	 *
+	 * @return Whether automatic stats posting is enabled
+	 */
 	public boolean isAutoPostingEnabled() {
 		return autoPostingConfig.isAutoPostingEnabled();
 	}
 
+	/**
+	 * Returns whether handling of unavailable events is enabled.
+	 *
+	 * <br><b>This only affects the JDA updater.</b>
+	 *
+	 * @return Whether handling of unavailable events is enabled
+	 */
 	public boolean isUnavailableEventsHandlingEnabled() {
 		return unavailableEventsEnabled;
 	}
@@ -101,7 +114,19 @@ public class BotListHandler {
 		updateAllStats(updater.getBotId(), updater.getServerCount(), updater);
 	}
 
-	public void updateAllStats(long botId, long serverCount, IBLHUpdater updater) {
+	/**
+	 * A method to update the stats for all added {@link BotList BotLists}.
+	 *
+	 * <br><b>If the current saved server count is the same as the provided one, the call will be ignored.</b>
+	 *
+	 * @param botId
+	 *        The id of the bot to update the stats for
+	 * @param serverCount
+	 *        The amount of servers
+	 * @param updater
+	 *        An IBLHUpdate instance to check against the dev mode predicate
+	 */
+	public void updateAllStats(long botId, long serverCount, @Nullable IBLHUpdater updater) {
 		if (devModePredicate.test(updater))
 			return;
 		if (serverCount == previousGuildCount) {

@@ -4,6 +4,8 @@ import dev.mlnr.blh.core.api.IBLHUpdater;
 import dev.mlnr.blh.core.internal.utils.Checks;
 import org.javacord.api.DiscordApi;
 
+import javax.annotation.Nullable;
+
 /**
  * An updater class for Javacord used for automatic stats posting.
  */
@@ -19,7 +21,7 @@ public class BLHJavacordUpdater implements IBLHUpdater {
 	 * @throws IllegalArgumentException
 	 *         If the provided DiscordApi object is {@code null}
 	 */
-	public BLHJavacordUpdater(DiscordApi javacord) {
+	public BLHJavacordUpdater(@Nullable DiscordApi javacord) {
 		Checks.notNull(javacord, "The DiscordApi object");
 
 		this.javacord = javacord;
