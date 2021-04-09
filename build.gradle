@@ -8,6 +8,12 @@ repositories {
     jcenter()
 }
 
+dependencies {
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
+}
+
+// the rest is from https://github.com/botblock/JavaBotBlockAPI/blob/master/build.gradle
+
 allprojects {
     apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
@@ -18,19 +24,73 @@ allprojects {
         jcenter()
     }
 
-    dependencies {
-        implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
-        implementation group: 'org.json', name: 'json', version: '20210307'
-        implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
+    ext {
+        dependencies {
+            implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
+
+            artifactId = (rootProject == project ? project.name : "$rootProject.name-$project.name")
+            moduleName = "${group}.blh${rootProject == project ? "" : ".${project.name}"}"
+        }
+
+        configureJar = { Object jarConfig ->
+            jarConfig.baseName = "$project.artifactId"
+            jarConfig.classifier = ''
+            jarConfig.extension = 'jar'
+
+            jarConfig.manifest {
+                it.attributes(
+                        'Implementation-Title': project.artifactId,
+                        'Implementation-Version': project.version,
+                        'Automatic-Module-Name': "${project.moduleName}"
+                )
+            }
+        }
+    }
+
+    build {
+        dependsOn { jar }
+        dependsOn { shadowJar }
     }
 }
 
-dependencies {
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
+subprojects {
+    apply plugin: 'java'
+
+    ext {
+        includeInParent = true
+    }
+
+    compileJava {
+        source = sourceSets.main.allJava
+        classpath = sourceSets.main.compileClasspath
+    }
+
+    jar {
+        destinationDirectory = file("$rootDir/build/libs/")
+        configureJar(it)
+    }
+
+    shadowJar {
+        destinationDirectory = file("$rootDir/build/libs/")
+        configureJar(it)
+    }
+}
+
+configurations {
+    compile {
+        description = 'compile'
+        transitive = true
+    }
+}
+
+shadowJar{
+    configureJar(it)
+
+    from { subprojects*.jar }
+    destinationDirectory = file("$rootDir/build/libs/")
 }
 
 group = 'dev.mlnr'
 description = 'BotListHandler'
 
-shadowJar.setProperty('archiveFileName', 'BotListHandler.jar')
 compileJava.options.encoding = 'UTF-8'
