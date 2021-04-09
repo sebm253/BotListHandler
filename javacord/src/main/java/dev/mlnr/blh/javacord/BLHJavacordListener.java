@@ -32,9 +32,8 @@ public class BLHJavacordListener implements ServerJoinListener, ServerLeaveListe
 	 */
 	public BLHJavacordListener(@Nonnull BotListHandler botListHandler) {
 		Checks.notNull(botListHandler, "The BotListHandler instance");
+		Checks.check(botListHandler.isAutoPostingEnabled(), "Can only use event based updating if autoposting is disabled");
 
-		if (botListHandler.isAutoPostingEnabled())
-			throw new IllegalStateException("Can only use event based updating if autoposting is disabled");
 		this.botListHandler = botListHandler;
 	}
 

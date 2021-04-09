@@ -141,7 +141,7 @@ public class BLHBuilder {
 	 * @param  unit
 	 *         The time unit to use
 	 *
-	 * @throws IllegalArgumentException
+	 * @throws IllegalStateException
 	 *         If no updater instance was set (using other constructor than {@link #BLHBuilder(IBLHUpdater)} or {@link #BLHBuilder(IBLHUpdater, Map)})
 	 * @throws IllegalStateException
 	 *         If the provided delay is less than {@code 1}
@@ -156,7 +156,7 @@ public class BLHBuilder {
 	 * @return This BLHBuilder instance
 	 */
 	public BLHBuilder setAutoPostDelay(long delay, @Nonnull TimeUnit unit) {
-		Checks.notNull(this.updater, "The updater instance");
+		Checks.check(this.updater == null, "The updater instance may not be null");
 		Checks.check(delay < 1, "The delay cannot be less than 1");
 		Checks.notNull(unit, "The time unit");
 		Checks.check(unit.ordinal() < TimeUnit.SECONDS.ordinal(), "The time unit cannot be smaller than seconds");
