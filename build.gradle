@@ -5,7 +5,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
@@ -21,7 +20,7 @@ allprojects {
     group = 'dev.mlnr'
 
     repositories {
-        jcenter()
+        mavenCentral()
     }
 
     ext {

@@ -29,6 +29,11 @@ public class Checks {
 			throw new IllegalStateException(name + " may not be empty");
 	}
 
+	public static void notNegative(long l, String name) {
+		if (l < 0)
+			throw new IllegalArgumentException(name + " may not be negative");
+	}
+
 	public static void checkListAndToken(BotList botList, String token) {
 		notNull(botList, "The bot list");
 		checkToken(token);

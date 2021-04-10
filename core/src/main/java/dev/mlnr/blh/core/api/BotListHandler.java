@@ -119,16 +119,24 @@ public class BotListHandler {
 	 *
 	 * <br><b>If the current saved server count is the same as the provided one, the call will be ignored.</b>
 	 *
-	 * @param botId
-	 *        The id of the bot to update the stats for
-	 * @param serverCount
-	 *        The amount of servers
-	 * @param updater
-	 *        An IBLHUpdate instance to check against the dev mode predicate
+	 * @param  botId
+	 *         The id of the bot to update the stats for
+	 * @param  serverCount
+	 *         The amount of servers
+	 * @param  updater
+	 *         The IBLHUpdater instance to check against the dev mode predicate
+	 *
+	 * @throws IllegalArgumentException
+	 *         If the provided bot id is negative
+	 * @throws IllegalArgumentException
+	 *         If the provided server amount is negative
 	 */
 	public void updateAllStats(long botId, long serverCount, @Nullable IBLHUpdater updater) {
 		if (devModePredicate.test(updater))
 			return;
+		Checks.notNegative(botId, "The bot id");
+		Checks.notNegative(serverCount, "The server amount");
+
 		if (serverCount == previousGuildCount) {
 			logger.info("No stats updating was necessary.");
 			return;

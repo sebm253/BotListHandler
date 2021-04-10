@@ -1,7 +1,3 @@
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation project(":core")
     compileOnly group: 'org.javacord', name: 'javacord', version: '3.3.0'

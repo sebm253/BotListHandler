@@ -235,11 +235,14 @@ public class BLHBuilder {
 	 * Builds BotListHandler.
 	 *
 	 * <br>If autoposting is used, this will start the posting scheduler.
-	 * <br>Returned instance can be used to be passed into the constructors of classes implementing {@link IBLHUpdater} to use event based updating or to
-	 * add bot lists or hotswap invalid tokens at runtime.
+	 * <br>Returned instance can be used to hotswap invalid tokens at runtime.
+	 * <b>Additionally, if autoposting isn't used, the instance can be used in a custom listener implementation
+	 * to update the stats or to be passed into the default listeners.</b>
 	 *
 	 * @throws IllegalArgumentException
 	 *         If no bot lists were added
+	 * @throws IllegalStateException
+	 *         If an IBLHUpdater instance was passed into one of the constructors and no delay has been set
 	 *
 	 * @return The BotListHandler instance
 	 */
