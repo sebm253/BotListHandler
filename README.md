@@ -129,7 +129,7 @@ new DiscordApiBuilder().setToken(token)
         .login()
         .thenAccept(discordApi -> {
             BLHJavacordUpdater javacordUpdater = new BLHJavacordUpdater(discordApi);
-            new BLHBuilder(javacordListener, botLists)
+            new BLHBuilder(javacordUpdater, botLists)
                     .setAutoPostDelay(3, TimeUnit.MINUTES).build();
         });
 ```
