@@ -134,6 +134,11 @@ new DiscordApiBuilder().setToken(token)
             new BLHBuilder(javacordUpdater, botLists)
                     .setAutoPostDelay(3, TimeUnit.MINUTES).build();
         });
+
+// your own updater
+MyUpdater myUpdater = new MyUpdater(); // this class has to implement IBLHUpdater
+BotListHandler botListHandler = new BLHBuilder(myUpdater, botLists)
+  .setAutoPostDelay(1, TimeUnit.HOURS).build();
 ```
 
 ### Your own updater for automatic stats posting
