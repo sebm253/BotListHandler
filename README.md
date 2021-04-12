@@ -17,7 +17,7 @@ This handler can be used in 3 ways:
 - jda: ![version_jda]
 
 ### Modules
-- core: the core module of the handler, required and bundled with every module (however it's recommended to declare the dependency separately for independent updates)
+- core: the core module of the handler, required and bundled with every module (**however it's recommended to declare the dependency separately for independent updates**)
 - jda: the jda module of the handler, use this if you intend to get the data from a JDA bot
 - javacord: the javacord module of the handler, use this if you intend to get the data from a Javacord bot
 
