@@ -11,7 +11,7 @@ This handler can be used in 3 ways:
 
 ## Getting the handler
 
-### Replace `%VERSION_xyz%` with the latest release tag:
+**Replace `%VERSION_xyz%` with the latest release tag:**
 - ![version_core]
 - ![version_jda]
 - ![version_javacord]
@@ -85,7 +85,7 @@ botLists.put(BotList.DBOTS_GG, "dbots_gg_token");
 BotListHandler botListHandler = new BLHBuilder().setBotLists(botLists).build();
 ```
 
-### You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.
+**You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.**
 
 ## Implementation
 
