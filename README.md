@@ -39,14 +39,14 @@ dependencies {
 
 **Maven**
 ```xml
-<!--required (bundled with every module, see the Modules section)-->
 <dependencies>
+    <!--required (bundled with every module, see the Modules section)-->
     <dependency>
         <groupId>dev.mlnr</groupId>
         <artifactId>BotListHandler-core</artifactId>
         <version>%VERSION_core%</version>
     </dependency>
-<!--optional-->
+    <!--optional-->
     <dependency>
         <groupId>dev.mlnr</groupId>
         <artifactId>BotListHandler-jda</artifactId>
