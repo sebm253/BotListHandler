@@ -1,40 +1,62 @@
+[version_core]: https://img.shields.io/maven-metadata/v?color=informational&label=Core&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-core%2Fmaven-metadata.xml
+[version_jda]: https://img.shields.io/maven-metadata/v?color=informational&label=JDA&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-jda%2Fmaven-metadata.xml
+[version_javacord]: https://img.shields.io/maven-metadata/v?color=informational&label=Javacord&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-javacord%2Fmaven-metadata.xml
+
 # BotListHandler
 
-This handler requires [JDA](https://github.com/DV8FromTheWorld/JDA), so if your bot doesn't use JDA, it won't work.
+This handler can be used in 3 ways:
+- standalone (updating the stats yourself)
+- using JDA
+- using Javacord
 
-## Getting started
+## Getting the handler
 
-### Replace `%VERSION%` with the latest release tag: [![Release](https://jitpack.io/v/caneleex/BotListHandler.svg)](https://jitpack.io/#caneleex/BotListHandler)
+### Replace `%VERSION_xyz%` with the latest release tag:
+- core (required):     ![version_core]
+- javacord: ![version_javacord]
+- jda: ![version_jda]
+
+### Modules
+- core: the core module of the handler, always required and bundled with every module (however it's recommended to declare the dependency separately for independent updates)
+- jda: the jda module of the handler, use this if you intend to get the data from a JDA bot
+- javacord: the javacord module of the handler, use this if you intend to get the data from a Javacord bot
 
 **Gradle**
 ```gradle
 repositories {
-  maven {
-    url 'https://jitpack.io'
-  }
+  mavenCentral()
 }
 
 dependencies {
-  implementation group: 'com.github.caneleex', name: 'BotListHandler', version: '%VERSION%'
+  // required
+  implementation group: 'dev.mlnr', name: 'BotListHandler-core', version: '%VERSION_core%'
+  
+  // optional
+  implementation group: 'dev.mlnr', name: 'BotListHandler-jda', version: '%VERSION_jda%'
+  implementation group: 'dev.mlnr', name: 'BotListHandler-javacord', version: '%VERSION_javacord%'
 }
 ```
 
 **Maven**
 ```xml
-<repositories>
-  <repository>
-    <id>jitpack</id>
-    <name>jitpack</name>
-    <url>https://jitpack.io</url>
-  </repository>
-</repositories>
-
+<!--required-->
 <dependencies>
-  <dependency>
-    <groupId>com.github.caneleex</groupId>
-    <artifactId>BotListHandler</artifactId>
-    <version>%VERSION%</version>
-  </dependency>
+    <dependency>
+        <groupId>dev.mlnr</groupId>
+        <artifactId>BotListHandler-core</artifactId>
+        <version>%VERSION_core%</version>
+    </dependency>
+<!--optional-->
+    <dependency>
+        <groupId>dev.mlnr</groupId>
+        <artifactId>BotListHandler-jda</artifactId>
+        <version>%VERSION_jda%</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.mlnr</groupId>
+        <artifactId>BotListHandler-javacord</artifactId>
+        <version>%VERSION_javacord%</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -42,7 +64,7 @@ dependencies {
 
 Using the `addBotList` method:
 ```java
-BotListHandler botListHandler = new BLHBuilder().addBotList(BotList.TOP_GG, "top_gg_token")
+BotListHandler botListHandler = new BLHBuilder(botId).addBotList(BotList.TOP_GG, "top_gg_token")
   .addBotList(BotList.DBOATS, "dboats_token")
   .build();
 ```
@@ -52,7 +74,7 @@ Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 botLists.put(BotList.DBL, "dbl_token");
 botLists.put(BotList.DEL, "del_token");
 
-BotListHandler botListHandler = new BLHBuilder(botLists).build();
+BotListHandler botListHandler = new BLHBuilder(botLists, botId).build();
 ```
 Using the `setBotLists` method:
 ```java
@@ -60,35 +82,52 @@ Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 botLists.put(BotList.BOTLIST_SPACE, "botlist_space_token");
 botLists.put(BotList.DBOTS_GG, "dbots_gg_token");
 
-BotListHandler botListHandler = new BLHBuilder().setBotLists(botLists).build();
+BotListHandler botListHandler = new BLHBuilder(botId).setBotLists(botLists).build();
 ```
 
 ## Implementation
 
-There are 2 ways to use BotListHandler:
+There are 3 ways to use BotListHandler:
+
+### Standalone
+```java
+botListHandler.updateAllStats(botId, serverCount);
+```
 
 ### Event based (recommended)
 
 ```java
+// JDA
 JDA jda = JDABuilder.create("token", intents)
-  .addEventListeners(new BLHEventListener(botListHandler))
+  .addEventListeners(new BLHJDAEventListener(botListHandler))
   .build();
   
 jda.awaitReady(); // optional, but if you want to update the stats after a ReadyEvent, it's required
+
+// Javacord
+new DiscordApiBuilder().setToken(token)
+        .addListener(new BLHJavacordListener(botListHandler))
+        .login();
 ```
 
 ### Automatic stats posting
 ```java
+// JDA
 JDA jda = JDABuilder.create("token", intents)
   .build();
   
 jda.awaitReady(); // optional
 
-BotListHandler botListHandler = new BLHBuilder(jda, botLists)
+BotListHandler botListHandler = new BLHBuilder(new BLHJDAUpdater(jda), botLists)
   .setAutoPostDelay(20, TimeUnit.SECONDS).build();
-// or
-BotListHandler botListHandler = new BLHBuilder(jda).setBotLists(botLists)
-  .setAutoPostDelay(3, TimeUnit.MINUTES).build();
+
+// Javacord - async approach. call join() after login() to block
+new DiscordApiBuilder().setToken(token)
+        .login()
+        .thenAccept(discordApi -> {
+            new BLHBuilder(new BLHJavacordUpdater(discordApi), botLists)
+                    .setAutoPostDelay(3, TimeUnit.MINUTES).build();
+        });
 ```
 
 ### You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.
