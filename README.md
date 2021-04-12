@@ -1,6 +1,6 @@
-[version_core]: https://img.shields.io/maven-metadata/v?color=informational&label=Core&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-core%2Fmaven-metadata.xml
-[version_jda]: https://img.shields.io/maven-metadata/v?color=informational&label=JDA&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-jda%2Fmaven-metadata.xml
-[version_javacord]: https://img.shields.io/maven-metadata/v?color=informational&label=Javacord&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-javacord%2Fmaven-metadata.xml
+[version_core]: https://img.shields.io/maven-metadata/v?color=informational&label=core%20(required,%20bundled)&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-core%2Fmaven-metadata.xml
+[version_jda]: https://img.shields.io/maven-metadata/v?color=informational&label=jda&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-jda%2Fmaven-metadata.xml
+[version_javacord]: https://img.shields.io/maven-metadata/v?color=informational&label=javacord&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-javacord%2Fmaven-metadata.xml
 
 # BotListHandler
 
@@ -12,9 +12,9 @@ This handler can be used in 3 ways:
 ## Getting the handler
 
 ### Replace `%VERSION_xyz%` with the latest release tag:
-- core (required, bundled):     ![version_core]
-- javacord: ![version_javacord]
-- jda: ![version_jda]
+- ![version_core]
+- ![version_jda]
+- ![version_javacord]
 
 ### Modules
 - core: the core module of the handler, required and bundled with every module (**however it's recommended to declare the dependency separately for independent updates**)
