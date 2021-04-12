@@ -34,7 +34,7 @@ allprojects {
             implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
 
             artifactId = (rootProject == project ? project.name : "$rootProject.name-$project.name")
-            moduleName = "${group}${rootProject == project ? "" : ".${project.name}"}"
+            moduleName = "${group}.blh${rootProject == project ? "" : ".${project.name}"}"
         }
 
         configureJar = { Object jarConfig, String classifier = '' ->

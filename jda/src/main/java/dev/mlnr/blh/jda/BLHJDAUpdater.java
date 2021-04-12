@@ -16,7 +16,7 @@ public class BLHJDAUpdater implements IBLHUpdater {
 	 * Creates a new updater for JDA.
 	 *
 	 * @param  jda
-	 *         The JDA object to get the bot id and guild amount from
+	 *         The JDA object to get the guild amount from
 	 *
 	 * @throws IllegalArgumentException
 	 *         If the provided JDA object is {@code null}

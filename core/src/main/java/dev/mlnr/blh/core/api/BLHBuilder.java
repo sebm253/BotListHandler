@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 @SuppressWarnings({"FieldHasSetterButNoGetter", "unused"})
 public class BLHBuilder {
 	private Map<BotList, String> botLists = new EnumMap<>(BotList.class);
+	private long botId;
 
 	private IBLHUpdater updater;
 	private long autoPostDelay;
@@ -24,7 +25,7 @@ public class BLHBuilder {
 	private boolean successLoggingEnabled = true;
 	private boolean ratelimitedLoggingEnabled = true;
 
-	private Predicate<IBLHUpdater> devModePredicate = o -> false;
+	private Predicate<Long> devModePredicate = o -> false;
 
 	private boolean unavailableEventsEnabled = true;
 
@@ -34,9 +35,14 @@ public class BLHBuilder {
 	 * <br><b>This type of builder can only be used for event based stats updating or updating by hand.</b>
 	 * Bot lists can be added by using one of provided methods.
 	 *
-	 * @see #BLHBuilder(Map)
+	 * @param botId
+	 *        The bot id
+	 *
+	 * @see  #BLHBuilder(Map, long)
 	 */
-	public BLHBuilder() {}
+	public BLHBuilder(long botId) {
+		setBotId(botId);
+	}
 
 	/**
 	 * Creates a BLHBuilder.
@@ -44,15 +50,18 @@ public class BLHBuilder {
 	 * <br><b>This type of builder can only be used for automatic stats posting.</b>
 	 * Bot lists can be added by using one of provided methods.
 	 *
+	 * @param  botId
+	 *         The bot id
 	 * @param  updater
-	 *         The IBLHUpdater instance to get the bot id and guild amount from
+	 *         The IBLHUpdater instance to get the guild amount from
 	 *
 	 * @throws IllegalArgumentException
 	 *         If the provided IBLHUpdater instance is {@code null}
 	 *
 	 * @see    #BLHBuilder(IBLHUpdater, Map)
 	 */
-	public BLHBuilder(@Nonnull IBLHUpdater updater) {
+	public BLHBuilder(long botId, @Nonnull IBLHUpdater updater) {
+		checkId(botId);
 		Checks.notNull(updater, "The updater instance");
 
 		this.updater = updater;
@@ -65,7 +74,7 @@ public class BLHBuilder {
 	 * Provided map of bot lists will be used to update stats.
 	 *
 	 * @param  updater
-	 *         The IBLHUpdater instance to get the bot id and guild amount from
+	 *         The IBLHUpdater instance to get the guild amount from
 	 * @param  botLists
 	 *         The bot lists map
 	 *
@@ -85,11 +94,14 @@ public class BLHBuilder {
 	 * <br><b>This type of builder can only be used for event based stats updating or updating by hand.</b>
 	 * Provided map of bot lists will be used to update stats.
 	 *
-	 * @param  botLists
-	 *         The bot lists map
+	 * @param botLists
+	 *        The bot lists map
+	 * @param botId
+	 *        The bot id
 	 */
-	public BLHBuilder(@Nonnull Map<BotList, String> botLists) {
+	public BLHBuilder(@Nonnull Map<BotList, String> botLists, long botId) {
 		setBotLists(botLists);
+		setBotId(botId);
 	}
 
 	/**
@@ -118,16 +130,32 @@ public class BLHBuilder {
 	 * @param  botLists
 	 *         The bot lists map
 	 *
-	 * @throws IllegalArgumentException
-	 *         If the provided bot list map is {@code null} or empty
-	 *
 	 * @return This BLHBuilder instance
 	 */
 	public BLHBuilder setBotLists(@Nonnull Map<BotList, String> botLists) {
-		Checks.notEmpty(botLists, "The bot lists map");
+		checkBotListsMap(botLists);
 		botLists.forEach((botList, token) -> Checks.checkToken(token));
 
 		this.botLists = botLists;
+		return this;
+	}
+
+	/**
+	 * Sets the bot id to update the stats for.
+	 *
+	 * @param  botId
+	 *         The bot id
+	 * 
+	 * @see    #BLHBuilder(long)
+	 * @see    #BLHBuilder(long, IBLHUpdater)
+	 * @see    #BLHBuilder(Map, long)
+	 *
+	 * @return This BLHBuilder instance
+	 */
+	public BLHBuilder setBotId(long botId) {
+		checkId(botId);
+
+		this.botId = botId;
 		return this;
 	}
 
@@ -142,15 +170,15 @@ public class BLHBuilder {
 	 *         The time unit to use
 	 *
 	 * @throws IllegalStateException
-	 *         If no updater instance was set (using other constructor than {@link #BLHBuilder(IBLHUpdater)} or {@link #BLHBuilder(IBLHUpdater, Map)})
+	 *         If no updater instance was set (using other constructor than {@link #BLHBuilder(long, IBLHUpdater)} or {@link #BLHBuilder(IBLHUpdater, Map)})
 	 * @throws IllegalStateException
 	 *         If the provided delay is less than {@code 1}
 	 * @throws IllegalArgumentException
 	 *         If the provided unit is {@code null}
 	 * @throws IllegalStateException
-	 *         If the provided unit is smaller than seconds
+	 *         If the provided unit is smaller than minutes
 	 *
-	 * @see    #BLHBuilder(IBLHUpdater)
+	 * @see    #BLHBuilder(long, IBLHUpdater)
 	 * @see    #BLHBuilder(IBLHUpdater, Map)
 	 *
 	 * @return This BLHBuilder instance
@@ -159,7 +187,7 @@ public class BLHBuilder {
 		Checks.check(this.updater == null, "The updater instance has to be set to use autoposting");
 		Checks.check(delay < 1, "The delay cannot be less than 1");
 		Checks.notNull(unit, "The time unit");
-		Checks.check(unit.ordinal() < TimeUnit.SECONDS.ordinal(), "The time unit cannot be smaller than seconds");
+		Checks.check(unit.ordinal() < TimeUnit.MINUTES.ordinal(), "The time unit cannot be smaller than minutes");
 
 		this.autoPostDelay = delay;
 		this.autoPostUnit = unit;
@@ -206,7 +234,7 @@ public class BLHBuilder {
 	 *
 	 * @return This BLHBuilder instance
 	 */
-	public BLHBuilder setDevModePredicate(@Nonnull Predicate<IBLHUpdater> predicate) {
+	public BLHBuilder setDevModePredicate(@Nonnull Predicate<Long> predicate) {
 		Checks.notNull(predicate, "The dev mode predicate");
 
 		this.devModePredicate = predicate;
@@ -247,10 +275,21 @@ public class BLHBuilder {
 	 * @return The BotListHandler instance
 	 */
 	public BotListHandler build() {
-		Checks.notEmpty(botLists, "The bot lists map");
+		checkBotListsMap(botLists);
+		checkId(botId);
 		Checks.check(updater != null && autoPostDelay == 0, "The autoposting delay has to be set");
 
-		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(updater, autoPostDelay, autoPostUnit),
+		return new BotListHandler(botLists, botId, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(updater, autoPostDelay, autoPostUnit),
 				new LoggingConfig(successLoggingEnabled, ratelimitedLoggingEnabled));
+	}
+
+	// internal
+
+	private void checkBotListsMap(Map<BotList, String> map) {
+		Checks.notEmpty(map, "The bot lists map");
+	}
+
+	private void checkId(long id) {
+		Checks.check(Long.toString(id).length() < 17, "The bot id may not be shorter than 17. Did you forget to set the bot id?");
 	}
 }

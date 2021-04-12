@@ -44,19 +44,19 @@ public class BLHJDAListener extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		JDA jda = event.getJDA();
-		botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size(), null);
+		botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size());
 	}
 
 	@Override
 	public void onGuildJoin(GuildJoinEvent event) {
 		JDA jda = event.getJDA();
-		botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size(), null);
+		botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size());
 	}
 
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
 		JDA jda = event.getJDA();
-		botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size(), null);
+		botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size());
 	}
 
 	// unavailable guilds
@@ -65,7 +65,7 @@ public class BLHJDAListener extends ListenerAdapter {
 	public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event) {
 		if (botListHandler.isUnavailableEventsHandlingEnabled()) {
 			JDA jda = event.getJDA();
-			botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size(), null);
+			botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size());
 		}
 	}
 
@@ -73,7 +73,7 @@ public class BLHJDAListener extends ListenerAdapter {
 	public void onUnavailableGuildLeave(UnavailableGuildLeaveEvent event) {
 		if (botListHandler.isUnavailableEventsHandlingEnabled()) {
 			JDA jda = event.getJDA();
-			botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size(), null);
+			botListHandler.updateAllStats(jda.getSelfUser().getIdLong(), jda.getGuildCache().size());
 		}
 	}
 }

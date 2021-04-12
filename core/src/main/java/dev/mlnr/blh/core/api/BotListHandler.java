@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Map;
@@ -21,7 +20,8 @@ import java.util.function.Predicate;
 
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
-	private final Predicate<IBLHUpdater> devModePredicate;
+	private final long botId;
+	private final Predicate<Long> devModePredicate;
 	private final boolean unavailableEventsEnabled;
 	private final AutoPostingConfig autoPostingConfig;
 	private final LoggingConfig loggingConfig;
@@ -35,9 +35,10 @@ public class BotListHandler {
 
 	private long previousGuildCount = -1;
 
-	BotListHandler(Map<BotList, String> botListMap, Predicate<IBLHUpdater> devModePredicate, boolean unavailableEventsEnabled,
+	BotListHandler(Map<BotList, String> botListMap, long botId, Predicate<Long> devModePredicate, boolean unavailableEventsEnabled,
 	               AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
 		this.botLists = botListMap;
+		this.botId = botId;
 		this.devModePredicate = devModePredicate;
 		this.unavailableEventsEnabled = unavailableEventsEnabled;
 		this.autoPostingConfig = autoPostingConfig;
@@ -100,6 +101,15 @@ public class BotListHandler {
 	}
 
 	/**
+	 * Returns the bot id BotListHandler is updating the stats for.
+	 *
+	 * @return The bot id BotListHandler is updating the stats for
+	 */
+	public long getBotId() {
+		return botId;
+	}
+
+	/**
 	 * Returns whether handling of unavailable events is enabled.
 	 *
 	 * <br><b>This only affects the JDA updater.</b>
@@ -111,7 +121,7 @@ public class BotListHandler {
 	}
 
 	void updateAllStats(IBLHUpdater updater) {
-		updateAllStats(updater.getBotId(), updater.getServerCount(), updater);
+		updateAllStats(updater.getBotId(), updater.getServerCount());
 	}
 
 	/**
@@ -123,16 +133,12 @@ public class BotListHandler {
 	 *         The id of the bot to update the stats for
 	 * @param  serverCount
 	 *         The amount of servers
-	 * @param  updater
-	 *         The IBLHUpdater instance to check against the dev mode predicate
 	 *
-	 * @throws IllegalArgumentException
-	 *         If the provided bot id is negative
 	 * @throws IllegalArgumentException
 	 *         If the provided server amount is negative
 	 */
-	public void updateAllStats(long botId, long serverCount, @Nullable IBLHUpdater updater) {
-		if (devModePredicate.test(updater))
+	public void updateAllStats(long botId, long serverCount) {
+		if (devModePredicate.test(botId))
 			return;
 		Checks.notNegative(botId, "The bot id");
 		Checks.notNegative(serverCount, "The server amount");

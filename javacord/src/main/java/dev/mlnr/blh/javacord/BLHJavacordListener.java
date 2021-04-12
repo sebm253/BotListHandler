@@ -40,12 +40,12 @@ public class BLHJavacordListener implements ServerJoinListener, ServerLeaveListe
 	@Override
 	public void onServerJoin(ServerJoinEvent event) {
 		DiscordApi javacord = event.getApi();
-		botListHandler.updateAllStats(javacord.getClientId(), javacord.getServers().size(), null);
+		botListHandler.updateAllStats(javacord.getClientId(), javacord.getServers().size());
 	}
 
 	@Override
 	public void onServerLeave(ServerLeaveEvent event) {
 		DiscordApi javacord = event.getApi();
-		botListHandler.updateAllStats(javacord.getClientId(), javacord.getServers().size(), null);
+		botListHandler.updateAllStats(javacord.getClientId(), javacord.getServers().size());
 	}
 }
