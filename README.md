@@ -85,6 +85,8 @@ botLists.put(BotList.DBOTS_GG, "dbots_gg_token");
 BotListHandler botListHandler = new BLHBuilder().setBotLists(botLists).build();
 ```
 
+### You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.
+
 ## Implementation
 
 There are 3 ways to use BotListHandler:
@@ -133,8 +135,6 @@ new DiscordApiBuilder().setToken(token)
                     .setAutoPostDelay(3, TimeUnit.MINUTES).build();
         });
 ```
-
-### You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.
 
 ## Currently supported bot lists
 
