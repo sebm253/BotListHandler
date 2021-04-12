@@ -12,7 +12,7 @@ This handler can be used in 3 ways:
 ## Getting the handler
 
 ### Replace `%VERSION_xyz%` with the latest release tag:
-- core (required):     ![version_core]
+- core (required, bundled):     ![version_core]
 - javacord: ![version_javacord]
 - jda: ![version_jda]
 
@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-  // required
+  // required (bundled with every module, see the Modules section)
   implementation group: 'dev.mlnr', name: 'BotListHandler-core', version: '%VERSION_core%'
   
   // optional
@@ -39,7 +39,7 @@ dependencies {
 
 **Maven**
 ```xml
-<!--required-->
+<!--required (bundled with every module, see the Modules section)-->
 <dependencies>
     <dependency>
         <groupId>dev.mlnr</groupId>
