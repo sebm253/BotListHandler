@@ -169,4 +169,4 @@ Creating your own updater for automatic stats posting is simple. All you have to
 
 ## Troubleshooting
 
-Please visit the [wiki](https://github.com/caneleex/BotListHandler/wiki/Troubleshooting) for troubleshooting steps. If the wiki doesn't contain a problem you're having, [open a new issue](https://github.com/caneleex/BotListHandler/issues/new).
+Please visit the [wiki](https://github.com/caneleex/BotListHandler/wiki/Troubleshooting) for troubleshooting steps. If the wiki doesn't contain the problem you're having, [open a new issue](https://github.com/caneleex/BotListHandler/issues/new).
