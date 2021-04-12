@@ -23,7 +23,7 @@ allprojects {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     group = 'dev.mlnr'
-    version = "2.0.0"
+    version = "2.0.0_DEV1"
 
     repositories {
         mavenCentral()
@@ -217,7 +217,6 @@ nexusPublishing {
             snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
             username = System.getenv("sonatype_username")
             password = System.getenv("sonatype_password")
-            stagingProfileId = System.getenv("sonatype_stagingProfileId")
         }
     }
 }
