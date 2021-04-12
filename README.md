@@ -136,6 +136,10 @@ new DiscordApiBuilder().setToken(token)
         });
 ```
 
+### Your own updater for automatic stats posting
+
+Creating your own updater for automatic stats posting is simple. All you have to do is to have your updater class implement `IBLHUpdater` and then provide values in the overriden methods.
+
 ## Currently supported bot lists
 
 [botlist.space](https://botlist.space)
