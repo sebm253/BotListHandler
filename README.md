@@ -98,7 +98,7 @@ botListHandler.updateAllStats(botId, serverCount);
 
 ```java
 // JDA
-BLHJDAListener jdaListener = new BLHJDAEventListener(botListHandler);
+BLHJDAListener jdaListener = new BLHJDAListener(botListHandler);
 JDA jda = JDABuilder.create("token", intents)
   .addEventListeners(jdaListener)
   .build();
