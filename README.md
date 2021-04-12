@@ -98,15 +98,17 @@ botListHandler.updateAllStats(botId, serverCount);
 
 ```java
 // JDA
+BLHJDAListener jdaListener = new BLHJDAEventListener(botListHandler);
 JDA jda = JDABuilder.create("token", intents)
-  .addEventListeners(new BLHJDAEventListener(botListHandler))
+  .addEventListeners(jdaListener)
   .build();
   
 jda.awaitReady(); // optional, but if you want to update the stats after a ReadyEvent, it's required
 
 // Javacord
+BLHJavacordListener javacordListener = new BLHJavacordListener(botListHandler);
 new DiscordApiBuilder().setToken(token)
-        .addListener(new BLHJavacordListener(botListHandler))
+        .addListener(javacordListener)
         .login();
 ```
 
@@ -118,14 +120,16 @@ JDA jda = JDABuilder.create("token", intents)
   
 jda.awaitReady(); // optional
 
-BotListHandler botListHandler = new BLHBuilder(new BLHJDAUpdater(jda), botLists)
+BLHJDAUpdater jdaUpdater = new BLHJDAUpdater(jda);
+BotListHandler botListHandler = new BLHBuilder(jdaUpdater, botLists)
   .setAutoPostDelay(20, TimeUnit.SECONDS).build();
 
 // Javacord - async approach. call join() after login() to block
 new DiscordApiBuilder().setToken(token)
         .login()
         .thenAccept(discordApi -> {
-            new BLHBuilder(new BLHJavacordUpdater(discordApi), botLists)
+            BLHJavacordUpdater javacordUpdater = new BLHJavacordUpdater(discordApi);
+            new BLHBuilder(javacordListener, botLists)
                     .setAutoPostDelay(3, TimeUnit.MINUTES).build();
         });
 ```
