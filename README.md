@@ -122,7 +122,7 @@ jda.awaitReady(); // optional
 
 BLHJDAUpdater jdaUpdater = new BLHJDAUpdater(jda);
 BotListHandler botListHandler = new BLHBuilder(jdaUpdater, botLists)
-  .setAutoPostDelay(20, TimeUnit.SECONDS).build();
+  .setAutoPostDelay(10, TimeUnit.MINUTES).build();
 
 // Javacord - async approach. call join() after login() to block
 new DiscordApiBuilder().setToken(token)
