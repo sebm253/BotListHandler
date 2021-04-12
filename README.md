@@ -21,7 +21,7 @@ This handler can be used in 3 ways:
 - jda: the jda module of the handler, use this if you intend to get the data from a JDA bot
 - javacord: the javacord module of the handler, use this if you intend to get the data from a Javacord bot
 
-**Gradle**
+### Gradle
 ```gradle
 repositories {
   mavenCentral()
@@ -37,7 +37,7 @@ dependencies {
 }
 ```
 
-**Maven**
+### Maven
 ```xml
 <dependencies>
     <!--required (bundled with every module, see the Modules section)-->
