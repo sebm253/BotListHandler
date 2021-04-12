@@ -64,7 +64,7 @@ dependencies {
 
 Using the `addBotList` method:
 ```java
-BotListHandler botListHandler = new BLHBuilder(botId).addBotList(BotList.TOP_GG, "top_gg_token")
+BotListHandler botListHandler = new BLHBuilder().addBotList(BotList.TOP_GG, "top_gg_token")
   .addBotList(BotList.DBOATS, "dboats_token")
   .build();
 ```
@@ -74,7 +74,7 @@ Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 botLists.put(BotList.DBL, "dbl_token");
 botLists.put(BotList.DEL, "del_token");
 
-BotListHandler botListHandler = new BLHBuilder(botLists, botId).build();
+BotListHandler botListHandler = new BLHBuilder(botLists).build();
 ```
 Using the `setBotLists` method:
 ```java
@@ -82,7 +82,7 @@ Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 botLists.put(BotList.BOTLIST_SPACE, "botlist_space_token");
 botLists.put(BotList.DBOTS_GG, "dbots_gg_token");
 
-BotListHandler botListHandler = new BLHBuilder(botId).setBotLists(botLists).build();
+BotListHandler botListHandler = new BLHBuilder().setBotLists(botLists).build();
 ```
 
 ## Implementation

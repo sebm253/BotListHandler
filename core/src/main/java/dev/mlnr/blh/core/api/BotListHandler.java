@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 
 public class BotListHandler {
 	private final Map<BotList, String> botLists;
-	private final long botId;
 	private final Predicate<Long> devModePredicate;
 	private final boolean unavailableEventsEnabled;
 	private final AutoPostingConfig autoPostingConfig;
@@ -35,10 +34,9 @@ public class BotListHandler {
 
 	private long previousGuildCount = -1;
 
-	BotListHandler(Map<BotList, String> botListMap, long botId, Predicate<Long> devModePredicate, boolean unavailableEventsEnabled,
+	BotListHandler(Map<BotList, String> botListMap, Predicate<Long> devModePredicate, boolean unavailableEventsEnabled,
 	               AutoPostingConfig autoPostingConfig, LoggingConfig loggingConfig) {
 		this.botLists = botListMap;
-		this.botId = botId;
 		this.devModePredicate = devModePredicate;
 		this.unavailableEventsEnabled = unavailableEventsEnabled;
 		this.autoPostingConfig = autoPostingConfig;
@@ -98,15 +96,6 @@ public class BotListHandler {
 	 */
 	public boolean isAutoPostingEnabled() {
 		return autoPostingConfig.isAutoPostingEnabled();
-	}
-
-	/**
-	 * Returns the bot id BotListHandler is updating the stats for.
-	 *
-	 * @return The bot id BotListHandler is updating the stats for
-	 */
-	public long getBotId() {
-		return botId;
 	}
 
 	/**
