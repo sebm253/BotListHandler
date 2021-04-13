@@ -30,6 +30,8 @@ allprojects {
 
     ext {
         dependencies {
+            implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+
             artifactId = (rootProject == project ? project.name : "$rootProject.name-$project.name")
             moduleName = "${group}.blh${rootProject == project ? "" : ".${project.name}"}"
         }
