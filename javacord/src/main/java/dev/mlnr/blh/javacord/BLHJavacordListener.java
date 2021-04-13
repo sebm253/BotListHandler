@@ -12,13 +12,13 @@ import org.javacord.api.listener.server.ServerLeaveListener;
 import javax.annotation.Nonnull;
 
 /**
- * A Javacord listener which is used to update bot stats when bot joins or leaves a guild.
+ * A Javacord listener which is used to update the bot's stats when the bot joins or leaves a guild.
  */
 public class BLHJavacordListener implements ServerJoinListener, ServerLeaveListener {
 	private final BotListHandler botListHandler;
 
 	/**
-	 * Constructs a new event listener used to update bot stats.
+	 * Constructs a new event listener used to update the bot's stats.
 	 *
 	 * <br>The stats will be updated when the bot joins/leaves a guild.
 	 *

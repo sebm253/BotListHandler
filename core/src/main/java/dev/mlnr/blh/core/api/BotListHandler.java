@@ -159,7 +159,7 @@ public class BotListHandler {
 		httpClient.newCall(requestBuilder.build()).enqueue(new Callback() {
 			@Override
 			public void onFailure(Call call, IOException e) {
-				logger.error("There was an error while updating stats for bot list {}", botListName, e);
+				logger.error("There was an error while updating the stats for bot list {}", botListName, e);
 			}
 
 			@Override
@@ -173,19 +173,19 @@ public class BotListHandler {
 				else {
 					int code = response.code();
 					if (code == 401) {
-						logger.error("Failed to update stats for bot list {} as the provided token is invalid. " +
+						logger.error("Failed to update the stats for bot list {} as the provided token is invalid. " +
 									"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
 						unauthorizedBotLists.add(botList);
 						return;
 					}
 					if (code == 429) {
 						if (loggingConfig.isRatelimitedLoggingEnabled())
-							logger.warn("Failed to update stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
+							logger.warn("Failed to update the stats for bot list {} as we got ratelimited. Retrying in 15 seconds", botListName);
 						ratelimitedBotLists.add(botList);
 						SCHEDULER.schedule(() -> updateStats(botList, token, botId, serverCount, true), 15, TimeUnit.SECONDS);
 						return;
 					}
-					logger.error("Failed to update stats for bot list {} with code {}", botListName, code);
+					logger.error("Failed to update the stats for bot list {} with code {}", botListName, code);
 				}
 			}
 		});

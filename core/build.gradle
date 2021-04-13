@@ -2,3 +2,5 @@ dependencies {
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
     implementation group: 'org.json', name: 'json', version: '20210307'
 }
+
+version = '2.0.0_1'

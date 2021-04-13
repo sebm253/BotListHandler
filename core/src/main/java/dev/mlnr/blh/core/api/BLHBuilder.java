@@ -32,9 +32,9 @@ public class BLHBuilder {
 	 * Creates a BLHBuilder.
 	 *
 	 * <br><b>This type of builder can only be used for event based stats updating or updating by hand.</b>
-	 * Bot lists can be added by using one of provided methods.
+	 * Bot lists can be added by using one of the provided methods.
 	 *
-	 * @see  #BLHBuilder(Map)
+	 * @see #BLHBuilder(Map)
 	 */
 	public BLHBuilder() {}
 
@@ -42,7 +42,7 @@ public class BLHBuilder {
 	 * Creates a BLHBuilder.
 	 *
 	 * <br><b>This type of builder can only be used for automatic stats posting.</b>
-	 * Bot lists can be added by using one of provided methods.
+	 * Bot lists can be added by using one of the provided methods.
 	 *
 	 * @param  updater
 	 *         The IBLHUpdater instance to get the bot id and the guild amount from
@@ -62,7 +62,7 @@ public class BLHBuilder {
 	 * Creates a BLHBuilder.
 	 *
 	 * <br><b>This type of builder can only be used for automatic stats posting.</b>
-	 * Provided map of bot lists will be used to update stats.
+	 * The provided map of bot lists will be used to update the stats.
 	 *
 	 * @param  updater
 	 *         The IBLHUpdater instance to get the bot id and the guild amount from
@@ -83,7 +83,7 @@ public class BLHBuilder {
 	 * Creates a BLHBuilder.
 	 *
 	 * <br><b>This type of builder can only be used for event based stats updating or updating by hand.</b>
-	 * Provided map of bot lists will be used to update stats.
+	 * The provided map of bot lists will be used to update the stats.
 	 *
 	 * @param botLists
 	 *        The bot lists map
@@ -131,7 +131,7 @@ public class BLHBuilder {
 	/**
 	 * Sets the autoposting delay.
 	 *
-	 * <br><b>This is only for when using a builder for automatic stats posting.</b>
+	 * <br><b>This only takes effect when using automatic stats posting.</b>
 	 *
 	 * @param  delay
 	 *         The delay to use
@@ -164,12 +164,12 @@ public class BLHBuilder {
 	}
 
 	/**
-	 * Enables/disables logging of successfully updating stats for a bot list.
+	 * Enables/disables logging of successfully updating the stats for a bot list.
 	 *
 	 * <br>Default: {@code true}
 	 *
 	 * @param  enabled
-	 *         Whether successfully updating stats should be logged
+	 *         Whether successfully updating the stats should be logged
 	 *
 	 * @return This BLHBuilder instance
 	 */
@@ -196,7 +196,7 @@ public class BLHBuilder {
 	/**
 	 * Sets the predicate which will be tested for dev mode.
 	 *
-	 * <br><b>If testing of the predicate evaluates to {@code false}, BotListHandler will keep updating stats.</b>
+	 * <br><b>If testing of the predicate evaluates to {@code false}, BotListHandler will keep updating the stats.</b>
 	 *
 	 * @param  predicate
 	 *         The predicate to test dev mode for
@@ -214,7 +214,7 @@ public class BLHBuilder {
 	 * Sets whether handling of join/leave events for unavailable guilds should be enabled.
 	 *
 	 * <br><b>Discord seems to keep sending one GUILD_DELETE event for an unavailable guild every time the bot starts
-	 * resulting in BotListHandler updating the count twice at startup. This only affects the JDA updater.</b>
+	 * resulting in BotListHandler updating the count twice at startup. This only affects the JDA listener.</b>
 	 *
 	 * <br>Default: {@code true}
 	 *
@@ -239,7 +239,7 @@ public class BLHBuilder {
 	 * @throws IllegalArgumentException
 	 *         If no bot lists were added
 	 * @throws IllegalStateException
-	 *         If an IBLHUpdater instance was passed into one of the constructors and no delay has been set
+	 *         If an IBLHUpdater instance was passed into one of the constructors and no delay was set
 	 *
 	 * @return The BotListHandler instance
 	 */

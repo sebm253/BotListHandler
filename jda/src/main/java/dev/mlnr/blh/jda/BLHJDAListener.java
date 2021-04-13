@@ -14,13 +14,13 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.annotation.Nonnull;
 
 /**
- * A JDA listener which is used to update bot stats when bot is ready or joins or leaves a guild.
+ * A JDA listener which is used to update the bot's stats when the bot is ready or joins or leaves a guild.
  */
 public class BLHJDAListener extends ListenerAdapter {
 	private final BotListHandler botListHandler;
 
 	/**
-	 * Constructs a new event listener used to update bot stats.
+	 * Constructs a new event listener used to update the bot's stats.
 	 *
 	 * <br>The stats will be updated when the bot joins/leaves a guild.
 	 * <b>Additionally, if you want to update the stats when the bot is ready, you need to register this listener using the
