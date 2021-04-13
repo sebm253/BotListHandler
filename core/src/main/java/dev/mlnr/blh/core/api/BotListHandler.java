@@ -4,7 +4,6 @@ import dev.mlnr.blh.core.internal.config.AutoPostingConfig;
 import dev.mlnr.blh.core.internal.config.LoggingConfig;
 import dev.mlnr.blh.core.internal.utils.Checks;
 import okhttp3.*;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,12 +148,11 @@ public class BotListHandler {
 					"You can hotswap the token by calling swapToken on the BotListHandler instance.", botListName);
 			return;
 		}
-		JSONObject payload = new JSONObject().put(botList.getServersParam(), serverCount);
-
+		String payload = "{\"" + botList.getServersParam() + "\":" + serverCount + "}";
 		String url = String.format(botList.getUrl(), botId);
 		Request.Builder requestBuilder = new Request.Builder().url(url)
 				.header("Authorization", token)
-				.post(RequestBody.create(payload.toString(), MediaType.parse("application/json")));
+				.post(RequestBody.create(payload, MediaType.parse("application/json")));
 
 		httpClient.newCall(requestBuilder.build()).enqueue(new Callback() {
 			@Override
