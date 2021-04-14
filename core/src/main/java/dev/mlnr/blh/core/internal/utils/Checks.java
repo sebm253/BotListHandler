@@ -2,6 +2,7 @@ package dev.mlnr.blh.core.internal.utils;
 
 import dev.mlnr.blh.core.api.BotList;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class Checks {
@@ -32,6 +33,18 @@ public class Checks {
 	public static void notNegative(long l, String name) {
 		if (l < 0)
 			throw new IllegalArgumentException(name + " may not be negative");
+	}
+
+	public static void noneNull(Object[] objects, String name) {
+		for (Object o : objects) {
+			notNull(o, name);
+		}
+	}
+
+	public static void noneNull(Collection<?> collection, String name) {
+		for (Object o : collection) {
+			notNull(o, name);
+		}
 	}
 
 	public static void checkListAndToken(BotList botList, String token) {
