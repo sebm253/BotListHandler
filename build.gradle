@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.3.0-alpha5'
-    compileOnly("net.dv8tion:JDA:4.2.0_228") {
+    compileOnly("net.dv8tion:JDA:4.2.0_247") {
         exclude group: 'club.minnced', module: 'opus-java'
     }
 }
