@@ -1,40 +1,62 @@
+[version_core]: https://img.shields.io/maven-metadata/v?color=informational&label=core%20(required,%20bundled)&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-core%2Fmaven-metadata.xml
+[version_jda]: https://img.shields.io/maven-metadata/v?color=informational&label=jda&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-jda%2Fmaven-metadata.xml
+[version_javacord]: https://img.shields.io/maven-metadata/v?color=informational&label=javacord&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-javacord%2Fmaven-metadata.xml
+
 # BotListHandler
 
-This handler requires [JDA](https://github.com/DV8FromTheWorld/JDA), so if your bot doesn't use JDA, it won't work.
+This handler can be used in 3 ways:
+- standalone (updating the stats yourself)
+- using JDA
+- using Javacord
 
-## Getting started
+## Getting the handler
 
-### Replace `%VERSION%` with the latest release tag: [![Release](https://jitpack.io/v/caneleex/BotListHandler.svg)](https://jitpack.io/#caneleex/BotListHandler)
+**Replace `%VERSION_xyz%` with the latest release tag:**
+- ![version_core]
+- ![version_jda]
+- ![version_javacord]
 
-**Gradle**
+### Modules
+- core: the core module of the handler, required and bundled with every module (**however it's recommended to declare the dependency separately for independent updates**)
+- jda: the jda module of the handler, use this if you intend to get the data from a JDA bot
+- javacord: the javacord module of the handler, use this if you intend to get the data from a Javacord bot
+
+### Gradle
 ```gradle
 repositories {
-  maven {
-    url 'https://jitpack.io'
-  }
+  mavenCentral()
 }
 
 dependencies {
-  implementation group: 'com.github.caneleex', name: 'BotListHandler', version: '%VERSION%'
+  // required (bundled with every module, see the Modules section)
+  implementation group: 'dev.mlnr', name: 'BotListHandler-core', version: '%VERSION_core%'
+  
+  // optional
+  implementation group: 'dev.mlnr', name: 'BotListHandler-jda', version: '%VERSION_jda%'
+  implementation group: 'dev.mlnr', name: 'BotListHandler-javacord', version: '%VERSION_javacord%'
 }
 ```
 
-**Maven**
+### Maven
 ```xml
-<repositories>
-  <repository>
-    <id>jitpack</id>
-    <name>jitpack</name>
-    <url>https://jitpack.io</url>
-  </repository>
-</repositories>
-
 <dependencies>
-  <dependency>
-    <groupId>com.github.caneleex</groupId>
-    <artifactId>BotListHandler</artifactId>
-    <version>%VERSION%</version>
-  </dependency>
+    <!--required (bundled with every module, see the Modules section)-->
+    <dependency>
+        <groupId>dev.mlnr</groupId>
+        <artifactId>BotListHandler-core</artifactId>
+        <version>%VERSION_core%</version>
+    </dependency>
+    <!--optional-->
+    <dependency>
+        <groupId>dev.mlnr</groupId>
+        <artifactId>BotListHandler-jda</artifactId>
+        <version>%VERSION_jda%</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.mlnr</groupId>
+        <artifactId>BotListHandler-javacord</artifactId>
+        <version>%VERSION_javacord%</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -63,35 +85,65 @@ botLists.put(BotList.DBOTS_GG, "dbots_gg_token");
 BotListHandler botListHandler = new BLHBuilder().setBotLists(botLists).build();
 ```
 
+**You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.**
+
 ## Implementation
 
-There are 2 ways to use BotListHandler:
+There are 3 ways to use BotListHandler:
+
+### Standalone
+```java
+botListHandler.updateAllStats(botId, serverCount);
+```
 
 ### Event based (recommended)
 
 ```java
+// JDA
+BLHJDAListener jdaListener = new BLHJDAListener(botListHandler);
 JDA jda = JDABuilder.create("token", intents)
-  .addEventListeners(new BLHEventListener(botListHandler))
+  .addEventListeners(jdaListener)
   .build();
   
 jda.awaitReady(); // optional, but if you want to update the stats after a ReadyEvent, it's required
+
+// Javacord
+BLHJavacordListener javacordListener = new BLHJavacordListener(botListHandler);
+new DiscordApiBuilder().setToken(token)
+        .addListener(javacordListener)
+        .login();
 ```
 
 ### Automatic stats posting
 ```java
+// JDA
 JDA jda = JDABuilder.create("token", intents)
   .build();
   
 jda.awaitReady(); // optional
 
-BotListHandler botListHandler = new BLHBuilder(jda, botLists)
-  .setAutoPostDelay(20, TimeUnit.SECONDS).build();
-// or
-BotListHandler botListHandler = new BLHBuilder(jda).setBotLists(botLists)
-  .setAutoPostDelay(3, TimeUnit.MINUTES).build();
+BLHJDAUpdater jdaUpdater = new BLHJDAUpdater(jda);
+BotListHandler botListHandler = new BLHBuilder(jdaUpdater, botLists)
+  .setAutoPostDelay(10, TimeUnit.MINUTES).build();
+
+// Javacord - async approach. call join() after login() to block
+new DiscordApiBuilder().setToken(token)
+        .login()
+        .thenAccept(discordApi -> {
+            BLHJavacordUpdater javacordUpdater = new BLHJavacordUpdater(discordApi);
+            new BLHBuilder(javacordUpdater, botLists)
+                    .setAutoPostDelay(3, TimeUnit.MINUTES).build();
+        });
+
+// your own updater
+MyUpdater myUpdater = new MyUpdater(); // this class has to implement IBLHUpdater
+BotListHandler botListHandler = new BLHBuilder(myUpdater, botLists)
+  .setAutoPostDelay(1, TimeUnit.HOURS).build();
 ```
 
-### You can store the `BotListHandler` instance to add bot lists or hotswap invalid tokens at runtime.
+### Your own updater for automatic stats posting
+
+Creating your own updater for automatic stats posting is simple. All you have to do is to have your updater class implement `IBLHUpdater` and then provide values in the overriden methods.
 
 ## Currently supported bot lists
 
@@ -117,4 +169,4 @@ BotListHandler botListHandler = new BLHBuilder(jda).setBotLists(botLists)
 
 ## Troubleshooting
 
-Please visit the [wiki](https://github.com/caneleex/BotListHandler/wiki/Troubleshooting) for troubleshooting steps. If the wiki doesn't contain a problem you're having, [open a new issue](https://github.com/caneleex/BotListHandler/issues/new).
+Please visit the [wiki](https://github.com/caneleex/BotListHandler/wiki/Troubleshooting) for troubleshooting steps. If the wiki doesn't contain the problem you're having, [open a new issue](https://github.com/caneleex/BotListHandler/issues/new).
