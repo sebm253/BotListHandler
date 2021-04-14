@@ -16,7 +16,7 @@ public class BLHJavacordUpdater implements IBLHUpdater {
 	 * Creates a new updater for Javacord.
 	 *
 	 * @param  javacord
-	 *         The DiscordApi object to get the guild amount from
+	 *         The DiscordApi object to get the bot id and the guild amount from
 	 *
 	 * @throws IllegalArgumentException
 	 *         If the provided DiscordApi object is {@code null}
