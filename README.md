@@ -116,7 +116,7 @@ new DiscordApiBuilder().setToken(token)
 
 ### Automatic stats posting
 ```java
-// JDA
+// JDA - supports sharding
 JDA jda = JDABuilder.create("token", intents)
   .build();
   
@@ -126,7 +126,7 @@ BLHJDAUpdater jdaUpdater = new BLHJDAUpdater(jda);
 BotListHandler botListHandler = new BLHBuilder(jdaUpdater, botLists)
   .setAutoPostDelay(10, TimeUnit.MINUTES).build();
 
-// Javacord - async approach. call join() after login() to block
+// Javacord - supports sharding. async approach - call join() after login() to block
 new DiscordApiBuilder().setToken(token)
         .login()
         .thenAccept(discordApi -> {
