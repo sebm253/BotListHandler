@@ -19,13 +19,16 @@ public class BLHJavacordUpdater implements IBLHUpdater {
 	 * @param  discordApis
 	 *         The DiscordApi objects to get the bot id and the guild amount from
 	 *
+	 * @throws IllegalArgumentException
+	 *         If the provided DiscordApi array is {@code null}
 	 * @throws IllegalStateException
 	 *         If the provided DiscordApi array is empty
 	 * @throws IllegalArgumentException
 	 *         If the provided DiscordApi array contains {@code null}
 	 */
 	public BLHJavacordUpdater(@Nonnull DiscordApi... discordApis) {
-		Checks.check(discordApis.length == 0, "The DiscordApis array may not be empty");
+		Checks.notNull(discordApis, "The DiscordApi array");
+		Checks.check(discordApis.length == 0, "The DiscordApi array may not be empty");
 		Checks.noneNull(discordApis, "The DiscordApi object");
 
 		this.discordApis = discordApis;
@@ -37,12 +40,15 @@ public class BLHJavacordUpdater implements IBLHUpdater {
 	 * @param  discordApis
 	 *         The DiscordApi collection to get the bot id and the guild amount from
 	 *
+	 * @throws IllegalArgumentException
+	 *         If the provided DiscordApi collection is {@code null}
 	 * @throws IllegalStateException
 	 *         If the provided DiscordApi collection is empty
 	 * @throws IllegalArgumentException
 	 *         If the provided DiscordApi collection contains {@code null}
 	 */
 	public BLHJavacordUpdater(@Nonnull Collection<DiscordApi> discordApis) {
+		Checks.notNull(discordApis, "The DiscordApi collection");
 		Checks.check(discordApis.isEmpty(), "The DiscordApi collection may not be empty");
 		Checks.noneNull(discordApis, "The DiscordApi object");
 
