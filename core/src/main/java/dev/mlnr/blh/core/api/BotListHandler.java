@@ -132,7 +132,8 @@ public class BotListHandler {
 		Checks.notNegative(serverCount, "The server amount");
 
 		if (serverCount == previousGuildCount) {
-			logger.info("No stats updating was necessary.");
+			if (loggingConfig.isNoUpdateNecessaryLoggingEnabled())
+				logger.info("No stats updating was necessary.");
 			return;
 		}
 		previousGuildCount = serverCount;

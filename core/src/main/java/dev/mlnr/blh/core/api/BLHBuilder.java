@@ -22,6 +22,7 @@ public class BLHBuilder {
 	private TimeUnit autoPostUnit;
 
 	private boolean successLoggingEnabled = true;
+	private boolean noUpdateNecessaryLoggingEnabled = true;
 	private boolean ratelimitedLoggingEnabled = true;
 
 	private Predicate<Long> devModePredicate = o -> false;
@@ -179,6 +180,21 @@ public class BLHBuilder {
 	}
 
 	/**
+	 * Enables/disables logging of "No stats updating was necessary" messages.
+	 *
+	 * <br>Default: {@code true}
+	 *
+	 * @param  enabled
+	 *         Whether "No stats updating was necessary" messages should be logged
+	 *
+	 * @return This BLHBuilder instance
+	 */
+	public BLHBuilder setNoUpdateNecessaryLoggingEnabled(boolean enabled) {
+		this.noUpdateNecessaryLoggingEnabled = enabled;
+		return this;
+	}
+
+	/**
 	 * Enables/disables logging of getting ratelimited.
 	 *
 	 * <br>Default: {@code true}
@@ -248,7 +264,7 @@ public class BLHBuilder {
 		Checks.check(updater != null && autoPostDelay == 0, "The autoposting delay has to be set");
 
 		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(updater, autoPostDelay, autoPostUnit),
-				new LoggingConfig(successLoggingEnabled, ratelimitedLoggingEnabled));
+				new LoggingConfig(successLoggingEnabled, noUpdateNecessaryLoggingEnabled, ratelimitedLoggingEnabled));
 	}
 
 	// internal
