@@ -96,7 +96,7 @@ There are 3 ways to use BotListHandler:
 botListHandler.updateAllStats(botId, serverCount);
 ```
 
-### Event based (recommended)
+### Event based
 
 ```java
 // JDA
@@ -114,7 +114,7 @@ new DiscordApiBuilder().setToken(token)
         .login();
 ```
 
-### Automatic stats posting
+### Automatic stats posting (recommended)
 ```java
 // JDA - supports sharding
 JDA jda = JDABuilder.create("token", intents)
