@@ -147,10 +147,6 @@ Creating your own updater for automatic stats posting is simple. All you have to
 
 ## Currently supported bot lists
 
-[botlist.space](https://botlist.space)
-
-[botsfordiscord.com](https://botsfordiscord.com)
-
 [botsondiscord.xyz](https://botsondiscord.xyz)
 
 [discordbotlist.com](https://discordbotlist.com)
@@ -162,6 +158,8 @@ Creating your own updater for automatic stats posting is simple. All you have to
 [discord.bots.gg](https://discord.bots.gg)
 
 [discordextremelist.xyz](https://discordextremelist.xyz)
+
+[discordlist.space](https://discordlist.space)
 
 [discordservices.net](https://discordservices.net)
 

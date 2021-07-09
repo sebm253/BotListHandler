@@ -1,7 +1,6 @@
 package dev.mlnr.blh.core.api;
 
 public enum BotList {
-	BOTS_FOR_DISCORD("https://botsfordiscord.com/api/bot/%s", "server_count"),
 	BOTS_ON_DISCORD("https://bots.ondiscord.xyz/bot-api/bots/%s/guilds", "guildCount"),
 	DISCORDLIST_SPACE("https://api.discordlist.space/v2/bots/%s", "serverCount"),
 	DBL("https://discordbotlist.com/api/v1/bots/%s/stats", "guilds"),
