@@ -24,6 +24,7 @@ public class BLHBuilder {
 	private boolean successLoggingEnabled = true;
 	private boolean noUpdateNecessaryLoggingEnabled = true;
 	private boolean ratelimitedLoggingEnabled = true;
+	private int errorThreshold = 3;
 
 	private Predicate<Long> devModePredicate = o -> false;
 
@@ -210,6 +211,29 @@ public class BLHBuilder {
 	}
 
 	/**
+	 * Sets the error threshold which when reached (including) will stop logging errors for the bot list.
+	 *
+	 * <br>Once a non-error code is returned for the bot list, the error logging will be resumed until the threshold is reached again.
+	 * <br><b>If set to {@code 0}, all errors will be logged regardless of the amount of occurrences.</b>
+	 *
+	 * <br>Default: {@code 3}
+	 *
+	 * @param  threshold
+	 *         The error threshold
+	 *
+	 * @throws IllegalArgumentException
+	 *         If the provided error threshold is negative
+	 *
+	 * @return This BLHBuilder instance
+	 */
+	public BLHBuilder setErrorLoggingThreshold(int threshold) {
+		Checks.notNegative(threshold, "The error threshold");
+
+		this.errorThreshold = threshold;
+		return this;
+	}
+
+	/**
 	 * Sets the predicate which will be tested for dev mode.
 	 *
 	 * <br><b>If testing of the predicate evaluates to {@code false}, BotListHandler will keep updating the stats.</b>
@@ -264,7 +288,7 @@ public class BLHBuilder {
 		Checks.check(updater != null && autoPostDelay == 0, "The autoposting delay has to be set");
 
 		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(updater, autoPostDelay, autoPostUnit),
-				new LoggingConfig(successLoggingEnabled, noUpdateNecessaryLoggingEnabled, ratelimitedLoggingEnabled));
+				new LoggingConfig(successLoggingEnabled, noUpdateNecessaryLoggingEnabled, ratelimitedLoggingEnabled, errorThreshold));
 	}
 
 	// internal

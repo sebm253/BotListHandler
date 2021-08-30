@@ -3,12 +3,19 @@ package dev.mlnr.blh.core.api;
 import dev.mlnr.blh.core.internal.config.AutoPostingConfig;
 import dev.mlnr.blh.core.internal.config.LoggingConfig;
 import dev.mlnr.blh.core.internal.utils.Checks;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +38,8 @@ public class BotListHandler {
 	private final Set<BotList> ratelimitedBotLists;
 	private final Set<BotList> unauthorizedBotLists;
 
+	private final Map<BotList, Integer> errorOccurrences;
+
 	private long previousGuildCount = -1;
 
 	BotListHandler(Map<BotList, String> botListMap, Predicate<Long> devModePredicate, boolean unavailableEventsEnabled,
@@ -42,6 +51,8 @@ public class BotListHandler {
 		this.loggingConfig = loggingConfig;
 		this.ratelimitedBotLists = EnumSet.noneOf(BotList.class);
 		this.unauthorizedBotLists = EnumSet.noneOf(BotList.class);
+
+		this.errorOccurrences = new EnumMap<>(BotList.class);
 
 		if (autoPostingConfig.isAutoPostingEnabled())
 			SCHEDULER.scheduleAtFixedRate(() -> updateAllStats(autoPostingConfig.getUpdater()), 0, autoPostingConfig.getDelay(), autoPostingConfig.getUnit());
@@ -167,7 +178,9 @@ public class BotListHandler {
 				if (response.isSuccessful()) {
 					if (loggingConfig.isSuccessLoggingEnabled())
 						logger.info("Successfully updated stats for bot list {}", botListName);
-					ratelimitedBotLists.remove(botList); // if the bot list isn't ratelimited, nothing will happen
+
+					ratelimitedBotLists.remove(botList); // if the bot list isn't in either of the sets, nothing will happen
+					errorOccurrences.remove(botList);
 				}
 				else {
 					int code = response.code();
@@ -184,7 +197,9 @@ public class BotListHandler {
 						SCHEDULER.schedule(() -> updateStats(botList, token, botId, serverCount, true), 15, TimeUnit.SECONDS);
 						return;
 					}
-					logger.error("Failed to update the stats for bot list {} with code {}", botListName, code);
+					var occurrences = errorOccurrences.merge(botList, 1, Integer::sum);
+					if (occurrences <= loggingConfig.getErrorThreshold())
+						logger.error("Failed to update the stats for bot list {} with code {}", botListName, code);
 				}
 			}
 		});

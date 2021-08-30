@@ -3,4 +3,4 @@ dependencies {
     compileOnly group: 'org.javacord', name: 'javacord', version: '3.3.0'
 }
 
-version = '2.0.0_8'
+version = '2.0.0_9'
