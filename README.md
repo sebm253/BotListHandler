@@ -149,17 +149,19 @@ Creating your own updater for automatic stats posting is simple. All you have to
 
 [botsondiscord.xyz](https://botsondiscord.xyz)
 
-[discordbotlist.com](https://discordbotlist.com)
-
 [discord.boats](https://discord.boats)
 
-[discordbots.co](https://discordbots.co)
-
 [discord.bots.gg](https://discord.bots.gg)
+
+[discordbotlist.com](https://discordbotlist.com)
+
+[discordbots.co](https://discordbots.co)
 
 [discordextremelist.xyz](https://discordextremelist.xyz)
 
 [discordlist.space](https://discordlist.space)
+
+[discords.com](https://discords.com/bots)
 
 [discordservices.net](https://discordservices.net)
 
