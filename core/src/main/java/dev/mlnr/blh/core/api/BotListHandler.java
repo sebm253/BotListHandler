@@ -197,7 +197,7 @@ public class BotListHandler {
 						SCHEDULER.schedule(() -> updateStats(botList, token, botId, serverCount, true), 15, TimeUnit.SECONDS);
 						return;
 					}
-					var occurrences = errorOccurrences.merge(botList, 1, Integer::sum);
+					int occurrences = errorOccurrences.merge(botList, 1, Integer::sum);
 					if (occurrences <= loggingConfig.getErrorThreshold())
 						logger.error("Failed to update the stats for bot list {} with code {}", botListName, code);
 				}
