@@ -198,7 +198,8 @@ public class BotListHandler {
 						return;
 					}
 					int occurrences = errorOccurrences.merge(botList, 1, Integer::sum);
-					if (occurrences <= loggingConfig.getErrorThreshold())
+					int threshold = loggingConfig.getErrorThreshold();
+					if (threshold == 0 || occurrences <= threshold)
 						logger.error("Failed to update the stats for bot list {} with code {}", botListName, code);
 				}
 			}
