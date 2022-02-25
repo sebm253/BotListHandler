@@ -5,7 +5,6 @@ public enum BotList {
 	DISCORDLIST_SPACE("https://api.discordlist.space/v2/bots/%s", "serverCount"),
 	DISCORDS("https://discords.com/bots/api/bot/%s", "server_count"),
 	DBL("https://discordbotlist.com/api/v1/bots/%s/stats", "guilds"),
-	DBOATS("https://discord.boats/api/bot/%s", "server_count"),
 	DBOTS_CO("https://api.discordbots.co/v1/public/bot/%s/stats", "serverCount"),
 	DBOTS_GG("https://discord.bots.gg/api/v1/bots/%s/stats", "guildCount"),
 	DEL("https://api.discordextremelist.xyz/v2/bot/%s/stats", "guildCount"),

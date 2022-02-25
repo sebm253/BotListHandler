@@ -65,7 +65,7 @@ dependencies {
 Using the `addBotList` method:
 ```java
 BotListHandler botListHandler = new BLHBuilder().addBotList(BotList.TOP_GG, "top_gg_token")
-  .addBotList(BotList.DBOATS, "dboats_token")
+  .addBotList(BotList.DSERVICES, "dservices_token")
   .build();
 ```
 Using the constructor:
@@ -148,8 +148,6 @@ Creating your own updater for automatic stats posting is simple. All you have to
 ## Currently supported bot lists
 
 [botsondiscord.xyz](https://botsondiscord.xyz)
-
-[discord.boats](https://discord.boats)
 
 [discord.bots.gg](https://discord.bots.gg)
 
