@@ -6,7 +6,7 @@ repositories {
 
 dependencies {
     api project(":core")
-    compileOnly("net.dv8tion:JDA:4.2.1_255") {
+    compileOnly("net.dv8tion:JDA:4.4.0_352") {
         exclude group: 'club.minnced', module: 'opus-java'
     }
 }
