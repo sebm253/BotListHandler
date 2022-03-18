@@ -18,8 +18,8 @@ public class BLHBuilder {
 	private Map<BotList, String> botLists = new EnumMap<>(BotList.class);
 
 	private IBLHUpdater updater;
+	private long autoPostInitialDelay;
 	private long autoPostDelay;
-	private TimeUnit autoPostUnit;
 
 	private boolean successLoggingEnabled = true;
 	private boolean noUpdateNecessaryLoggingEnabled = true;
@@ -131,6 +131,44 @@ public class BLHBuilder {
 	}
 
 	/**
+	 * Sets the initial autoposting delay.
+	 * <br>After this delay, the first stats request will run.
+	 * {@code 0} can be passed to run an update immediately after building.
+	 *
+	 * <br><b>This only takes effect when using automatic stats posting.</b>
+	 *
+	 * <br>Default: {@code 0}
+	 *
+	 * @param  delay
+	 *         The delay to use
+	 * @param  unit
+	 *         The time unit to use
+	 *
+	 * @throws IllegalStateException
+	 *         If no updater instance was set (using other constructor than {@link #BLHBuilder(IBLHUpdater)} or {@link #BLHBuilder(IBLHUpdater, Map)})
+	 * @throws IllegalArgumentException
+	 *         If the provided delay is negative
+	 * @throws IllegalArgumentException
+	 *         If the provided unit is {@code null}
+	 * @throws IllegalStateException
+	 *         If the provided unit is smaller than seconds
+	 *
+	 * @see    #BLHBuilder(IBLHUpdater)
+	 * @see    #BLHBuilder(IBLHUpdater, Map)
+	 *
+	 * @return This BLHBuilder instance
+	 */
+	public BLHBuilder setAutoPostInitialDelay(long delay, @Nonnull TimeUnit unit) {
+		Checks.check(this.updater == null, "The updater instance has to be set to use autoposting");
+		Checks.notNegative(delay, "The initial delay");
+		Checks.notNull(unit, "The time unit");
+		Checks.check(unit.ordinal() < TimeUnit.SECONDS.ordinal(), "The time unit cannot be smaller than seconds");
+
+		this.autoPostInitialDelay = unit.toMillis(delay);
+		return this;
+	}
+
+	/**
 	 * Sets the autoposting delay.
 	 *
 	 * <br><b>This only takes effect when using automatic stats posting.</b>
@@ -160,8 +198,7 @@ public class BLHBuilder {
 		Checks.notNull(unit, "The time unit");
 		Checks.check(unit.ordinal() < TimeUnit.MINUTES.ordinal(), "The time unit cannot be smaller than minutes");
 
-		this.autoPostDelay = delay;
-		this.autoPostUnit = unit;
+		this.autoPostDelay = unit.toMillis(delay);
 		return this;
 	}
 
@@ -287,7 +324,8 @@ public class BLHBuilder {
 		checkBotListsMap(botLists);
 		Checks.check(updater != null && autoPostDelay == 0, "The autoposting delay has to be set");
 
-		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled, new AutoPostingConfig(updater, autoPostDelay, autoPostUnit),
+		return new BotListHandler(botLists, devModePredicate, unavailableEventsEnabled,
+				new AutoPostingConfig(updater, autoPostInitialDelay, autoPostDelay),
 				new LoggingConfig(successLoggingEnabled, noUpdateNecessaryLoggingEnabled, ratelimitedLoggingEnabled, errorThreshold));
 	}
 

@@ -3,25 +3,14 @@ package dev.mlnr.blh.core.api;
 import dev.mlnr.blh.core.internal.config.AutoPostingConfig;
 import dev.mlnr.blh.core.internal.config.LoggingConfig;
 import dev.mlnr.blh.core.internal.utils.Checks;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.Predicate;
 
 public class BotListHandler {
@@ -54,8 +43,10 @@ public class BotListHandler {
 
 		this.errorOccurrences = new EnumMap<>(BotList.class);
 
-		if (autoPostingConfig.isAutoPostingEnabled())
-			SCHEDULER.scheduleAtFixedRate(() -> updateAllStats(autoPostingConfig.getUpdater()), 0, autoPostingConfig.getDelay(), autoPostingConfig.getUnit());
+		if (autoPostingConfig.isAutoPostingEnabled()) {
+			SCHEDULER.scheduleAtFixedRate(() -> updateAllStats(autoPostingConfig.getUpdater()), autoPostingConfig.getInitialDelay(),
+					autoPostingConfig.getDelay(), TimeUnit.MILLISECONDS);
+		}
 	}
 
 	/**

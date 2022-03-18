@@ -2,17 +2,15 @@ package dev.mlnr.blh.core.internal.config;
 
 import dev.mlnr.blh.core.api.IBLHUpdater;
 
-import java.util.concurrent.TimeUnit;
-
 public class AutoPostingConfig {
 	private final IBLHUpdater updater;
+	private final long initialDelay;
 	private final long delay;
-	private final TimeUnit unit;
 
-	public AutoPostingConfig(IBLHUpdater updater, long delay, TimeUnit unit) {
+	public AutoPostingConfig(IBLHUpdater updater, long initialDelay, long delay) {
 		this.updater = updater;
+		this.initialDelay = initialDelay;
 		this.delay = delay;
-		this.unit = unit;
 	}
 
 	public boolean isAutoPostingEnabled() {
@@ -23,11 +21,11 @@ public class AutoPostingConfig {
 		return updater;
 	}
 
-	public long getDelay() {
-		return delay;
+	public long getInitialDelay() {
+		return initialDelay;
 	}
 
-	public TimeUnit getUnit() {
-		return unit;
+	public long getDelay() {
+		return delay;
 	}
 }
