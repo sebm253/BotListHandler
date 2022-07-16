@@ -79,7 +79,7 @@ BotListHandler botListHandler = new BLHBuilder(botLists).build();
 Using the `setBotLists` method:
 ```java
 Map<BotList, String> botLists = new EnumMap<>(BotList.class);
-botLists.put(BotList.BOTLIST_SPACE, "botlist_space_token");
+botLists.put(BotList.DISCORDS, "discords_token");
 botLists.put(BotList.DBOTS_GG, "dbots_gg_token");
 
 BotListHandler botListHandler = new BLHBuilder().setBotLists(botLists).build();
@@ -156,8 +156,6 @@ Creating your own updater for automatic stats posting is simple. All you have to
 [discordbots.co](https://discordbots.co)
 
 [discordextremelist.xyz](https://discordextremelist.xyz)
-
-[discordlist.space](https://discordlist.space)
 
 [discords.com](https://discords.com/bots)
 
