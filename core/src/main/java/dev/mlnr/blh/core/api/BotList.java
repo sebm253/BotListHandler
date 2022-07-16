@@ -8,12 +8,6 @@ public enum BotList {
 	 */
 	BOTS_ON_DISCORD("https://bots.ondiscord.xyz/bot-api/bots/%s/guilds", "guildCount"),
 	/**
-	 * discordlist.space
-	 *
-	 * @see <a href="https://discordlist.space/" target="_blank">Website</a>
-	 */
-	DISCORDLIST_SPACE("https://api.discordlist.space/v2/bots/%s", "serverCount"),
-	/**
 	 * discords.com/bots
 	 *
 	 * @see <a href="https://discords.com/bots/" target="_blank">Website</a>
