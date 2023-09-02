@@ -1,3 +1,5 @@
+# BotListHandler has been discontinued as of September 2nd, 2023. I lost interest in Java a long time ago and somewhat recently, in bot lists as well.
+
 [version_core]: https://img.shields.io/maven-metadata/v?color=informational&label=core%20(required,%20bundled)&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-core%2Fmaven-metadata.xml
 [version_jda]: https://img.shields.io/maven-metadata/v?color=informational&label=jda&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-jda%2Fmaven-metadata.xml
 [version_javacord]: https://img.shields.io/maven-metadata/v?color=informational&label=javacord&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fmlnr%2FBotListHandler-javacord%2Fmaven-metadata.xml
